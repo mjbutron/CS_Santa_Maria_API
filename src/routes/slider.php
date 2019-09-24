@@ -2,7 +2,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app = new \Slim\App;
+// Routes Slider
 
 // GET: Get all slider
 $app->get('/api/allSlider', function(Request $request, Response $response){
@@ -10,14 +10,14 @@ $app->get('/api/allSlider', function(Request $request, Response $response){
   try{
     $db = new db();
     $db = $db->conectDB();
-    $resultado = $db->query($sql);
-    if ($resultado->rowCount() > 0){
-      $sliders = $resultado->fetchAll(PDO::FETCH_OBJ);
+    $result = $db->query($sql);
+    if ($result->rowCount() > 0){
+      $sliders = $result->fetchAll(PDO::FETCH_OBJ);
       echo json_encode($sliders);
     }else {
       echo json_encode("Ups! No existen imagenes en la base de datos.");
     }
-    $resultado = null;
+    $result = null;
     $db = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
@@ -29,19 +29,21 @@ $app->post('/api/slider/new', function(Request $request, Response $response){
    $title = $request->getParam('title');
    $description = $request->getParam('description');
    $image = $request->getParam('image');
+   $user = $request->getParam('user');
 
-  $sql = "INSERT INTO slider (title, description, image) VALUES
-          (:title, :description, :image)";
+  $sql = "INSERT INTO slider (title, description, image, create_date, update_date, user_id) VALUES
+          (:title, :description, :image, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), :user)";
   try{
     $db = new db();
     $db = $db->conectDB();
-    $resultado = $db->prepare($sql);
-    $resultado->bindParam(':title', $title);
-    $resultado->bindParam(':description', $description);
-    $resultado->bindParam(':image', $image);
-    $resultado->execute();
+    $result = $db->prepare($sql);
+    $result->bindParam(':title', $title);
+    $result->bindParam(':description', $description);
+    $result->bindParam(':image', $image);
+    $result->bindParam(':user', $user);
+    $result->execute();
     echo json_encode("Nuevo Slider creado.");
-    $resultado = null;
+    $result = null;
     $db = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
@@ -54,23 +56,26 @@ $app->put('/api/slider/update/{id}', function(Request $request, Response $respon
    $title = $request->getParam('title');
    $description = $request->getParam('description');
    $image = $request->getParam('image');
+   $user = $request->getParam('user');
 
   $sql = "UPDATE slider SET
           title = :title,
           description = :description,
-          image = :image
+          image = :image,
+          user_id = :user
         WHERE id = $id_slider";
 
   try{
     $db = new db();
     $db = $db->conectDB();
-    $resultado = $db->prepare($sql);
-    $resultado->bindParam(':title', $title);
-    $resultado->bindParam(':description', $description);
-    $resultado->bindParam(':image', $image);
-    $resultado->execute();
+    $result = $db->prepare($sql);
+    $result->bindParam(':title', $title);
+    $result->bindParam(':description', $description);
+    $result->bindParam(':image', $image);
+    $result->bindParam(':user', $user);
+    $result->execute();
     echo json_encode("Slider actualizado.");
-    $resultado = null;
+    $result = null;
     $db = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
