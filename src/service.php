@@ -1,31 +1,33 @@
 <?php
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Request;
+use Slim\Http\Response;
+use \Firebase\JWT\JWT;
 
 // Routes Services
 
 // GET: Get all services
-$app->get('/api/allServices', function(Request $request, Response $response){
+$app->get('/api/allServices', function(Request $request, Response $response, array $args){
   $sql = "SELECT * FROM service";
   try{
-    $db = new db();
-    $db = $db->conectDB();
-    $result = $db->query($sql);
-    if ($result->rowCount() > 0){
-      $services = $result->fetchAll(PDO::FETCH_OBJ);
-      echo json_encode($services);
-    }else {
-      echo json_encode("¡Ups! No existen servicios para mostrar.");
+    $res = $this->db->prepare($sql);
+    $res->execute();
+    $services = $res->fetchAll(PDO::FETCH_OBJ);
+
+    if($services) {
+      return $this->response->withJson($services);
+    }else{
+      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
     }
-    $result = null;
-    $db = null;
+
+    $res = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
 });
 
+
 // POST: Add new service
-$app->post('/api/service/new', function(Request $request, Response $response){
+$app->post('/admin/api/service/new', function(Request $request, Response $response, array $args){
    $title = $request->getParam('title');
    $image_home = $request->getParam('image_home');
    $subtitle_home = $request->getParam('subtitle_home');
@@ -40,29 +42,26 @@ $app->post('/api/service/new', function(Request $request, Response $response){
   VALUES (:title, :image_home, :subtitle_home, :description_home, :home, :image, :subtitle, :description,  CURRENT_TIMESTAMP(),  CURRENT_TIMESTAMP(), :user)";
 
   try{
-    $db = new db();
-    $db = $db->conectDB();
-    $result = $db->prepare($sql);
-    $result->bindParam(':title', $title);
-    $result->bindParam(':image_home', $image_home);
-    $result->bindParam(':subtitle_home', $subtitle_home);
-    $result->bindParam(':description_home', $description_home);
-    $result->bindParam(':home', $home);
-    $result->bindParam(':image', $image);
-    $result->bindParam(':subtitle', $subtitle);
-    $result->bindParam(':description', $description);
-    $result->bindParam(':user', $user);
-    $result->execute();
-    echo json_encode("Nuevo servicio creado.");
-    $result = null;
-    $db = null;
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':title', $title);
+    $res->bindParam(':image_home', $image_home);
+    $res->bindParam(':subtitle_home', $subtitle_home);
+    $res->bindParam(':description_home', $description_home);
+    $res->bindParam(':home', $home);
+    $res->bindParam(':image', $image);
+    $res->bindParam(':subtitle', $subtitle);
+    $res->bindParam(':description', $description);
+    $res->bindParam(':user', $user);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo servicio creado.']);
+    $res = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
 });
 
 // PUT: Update service
-$app->put('/api/service/update/{id}', function(Request $request, Response $response){
+$app->put('/admin/api/service/update/{id}', function(Request $request, Response $response, array $args){
    $id_service = $request->getAttribute('id');
    $title = $request->getParam('title');
    $image_home = $request->getParam('image_home');
@@ -87,23 +86,22 @@ $app->put('/api/service/update/{id}', function(Request $request, Response $respo
           WHERE id = $id_service";
 
   try{
-    $db = new db();
-    $db = $db->conectDB();
-    $result = $db->prepare($sql);
-    $result->bindParam(':title', $title);
-    $result->bindParam(':image_home', $image_home);
-    $result->bindParam(':subtitle_home', $subtitle_home);
-    $result->bindParam(':description_home', $description_home);
-    $result->bindParam(':home', $home);
-    $result->bindParam(':image', $image);
-    $result->bindParam(':subtitle', $subtitle);
-    $result->bindParam(':description', $description);
-    $result->bindParam(':user', $user);
-    $result->execute();
-    echo json_encode("Servicio actualizado.");
-    $result = null;
-    $db = null;
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':title', $title);
+    $res->bindParam(':image_home', $image_home);
+    $res->bindParam(':subtitle_home', $subtitle_home);
+    $res->bindParam(':description_home', $description_home);
+    $res->bindParam(':home', $home);
+    $res->bindParam(':image', $image);
+    $res->bindParam(':subtitle', $subtitle);
+    $res->bindParam(':description', $description);
+    $res->bindParam(':user', $user);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Servicio actualizado.']);
+    $res = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
 });
+
+?>
