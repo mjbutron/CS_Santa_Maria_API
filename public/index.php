@@ -13,6 +13,7 @@ require __DIR__ . '/../src/middleware.php';
 require __DIR__ . '/../src/routes.php';
 require __DIR__ . '/../src/slider.php';
 require __DIR__ . '/../src/service.php';
+require __DIR__ . '/../src/user.php';
 
 $app->run();
 
