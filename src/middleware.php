@@ -14,6 +14,7 @@ $app->add(function ($req, $res, $next) {
 $app->add(new \Tuupola\Middleware\JwtAuthentication([
     "path" => "/admin", /* or ["/api", "/admin"] */
     "attribute" => "decoded_token_data",
+    "secure" => false,
     "secret" => "supersecretkeyyoushouldnotcommittogithub",
     "algorithm" => ["HS256"],
     "error" => function ($response, $arguments) {
