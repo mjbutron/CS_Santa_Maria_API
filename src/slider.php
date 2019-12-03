@@ -7,7 +7,7 @@ use \Firebase\JWT\JWT;
 
 // GET: Get all slider
 $app->get('/api/allSlider', function(Request $request, Response $response, array $args){
-  $sql = "SELECT * FROM slider";
+  $sql = "SELECT * FROM slider ORDER BY order_slider ASC";
   try{
     $res = $this->db->prepare($sql);
     $res->execute();
@@ -30,15 +30,17 @@ $app->post('/admin/api/slider/new', function(Request $request, Response $respons
    $title = $request->getParam('title');
    $description = $request->getParam('description');
    $image = $request->getParam('image');
+   $order_slider = $request->getParam('order_slider');
    $user = $request->getParam('user');
 
-  $sql = "INSERT INTO slider (title, description, image, create_date, update_date, user_id) VALUES
-          (:title, :description, :image, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), :user)";
+  $sql = "INSERT INTO slider (title, description, image, order_slider, create_date, update_date, user_id) VALUES
+          (:title, :description, :image, :order_slider, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), :user)";
   try{
     $res = $this->db->prepare($sql);
     $res->bindParam(':title', $title);
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
+    $res->bindParam(':order_slider', $order_slider);
     $res->bindParam(':user', $user);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo Slider creado.']);
@@ -54,12 +56,14 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
    $title = $request->getParam('title');
    $description = $request->getParam('description');
    $image = $request->getParam('image');
+   $order_slider = $request->getParam('order_slider');
    $user = $request->getParam('user');
 
   $sql = "UPDATE slider SET
           title = :title,
           description = :description,
           image = :image,
+          order_slider = :order_slider,
           user_id = :user
         WHERE id = $id_slider";
 
@@ -68,6 +72,7 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
     $res->bindParam(':title', $title);
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
+    $res->bindParam(':order_slider', $order_slider);
     $res->bindParam(':user', $user);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Slider actualizado.']);
