@@ -57,7 +57,7 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
    $description = $request->getParam('description');
    $image = $request->getParam('image');
    $order_slider = $request->getParam('order_slider');
-   $user = $request->getParam('user');
+   $user = $request->getParam('user_id');
 
   $sql = "UPDATE slider SET
           title = :title,
