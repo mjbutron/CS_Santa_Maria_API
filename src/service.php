@@ -7,7 +7,7 @@ use \Firebase\JWT\JWT;
 
 // GET: Get all services
 $app->get('/api/allServices', function(Request $request, Response $response, array $args){
-  $sql = "SELECT * FROM service";
+  $sql = "SELECT * FROM service ORDER BY create_date DESC";
   try{
     $res = $this->db->prepare($sql);
     $res->execute();

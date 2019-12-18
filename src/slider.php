@@ -56,6 +56,7 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
    $title = $request->getParam('title');
    $description = $request->getParam('description');
    $image = $request->getParam('image');
+   $color_text = $request->getParam('color_text');
    $order_slider = $request->getParam('order_slider');
    $user = $request->getParam('user_id');
 
@@ -63,6 +64,7 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
           title = :title,
           description = :description,
           image = :image,
+          color_text = :color_text,
           order_slider = :order_slider,
           user_id = :user
         WHERE id = $id_slider";
@@ -72,6 +74,7 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
     $res->bindParam(':title', $title);
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
+    $res->bindParam(':color_text', $color_text);
     $res->bindParam(':order_slider', $order_slider);
     $res->bindParam(':user', $user);
     $res->execute();
