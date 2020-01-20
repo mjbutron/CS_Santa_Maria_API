@@ -25,6 +25,34 @@ $app->get('/api/allWorkshops', function(Request $request, Response $response, ar
   }
 });
 
+// GET: Get workshops by page
+$app->get('/api/workshopsByPage/{page}', function(Request $request, Response $response, array $args){
+  $page = $request->getAttribute('page');
+  $resultPerPage = 2;
+  $start = ($page - 1) * $resultPerPage;
+
+  $sql = "SELECT COUNT(*) FROM workshop";
+  $sqlPage = "SELECT * FROM workshop ORDER BY session_date ASC LIMIT $start, $resultPerPage";
+  try{
+    $res = $this->db->prepare($sql);
+    $res->execute();
+    $count = $res->fetchColumn();
+
+    if($count) {
+      $res = $this->db->prepare($sqlPage);
+      $res->execute();
+      $workshops = $res->fetchAll(PDO::FETCH_OBJ);
+      return $this->response->withJson(['allWorkshops' => $workshops, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
+    }else{
+      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
+    }
+
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
 //
 // // POST: Add new service
 // $app->post('/admin/api/service/new', function(Request $request, Response $response, array $args){
