@@ -17,6 +17,7 @@ require __DIR__ . '/../src/service.php';
 require __DIR__ . '/../src/upload.php';
 require __DIR__ . '/../src/user.php';
 require __DIR__ . '/../src/workshop.php';
+require __DIR__ . '/../src/course.php';
 
 $app->run();
 
