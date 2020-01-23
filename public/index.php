@@ -19,6 +19,8 @@ require __DIR__ . '/../src/user.php';
 require __DIR__ . '/../src/workshop.php';
 require __DIR__ . '/../src/course.php';
 require __DIR__ . '/../src/homeinfo.php';
+require __DIR__ . '/../src/footerinfo.php';
+require __DIR__ . '/../src/contact.php';
 
 $app->run();
 
