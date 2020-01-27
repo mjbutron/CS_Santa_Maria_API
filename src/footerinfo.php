@@ -4,7 +4,7 @@ use Slim\Http\Response;
 use \Firebase\JWT\JWT;
 
 // Footer Information
-$app->get('/admin/api/footer/info', function(Request $request, Response $response, array $args){
+$app->get('/api/footer/info', function(Request $request, Response $response, array $args){
   $sql = "SELECT id, footer_address, footer_email, footer_ph, footer_schdl
   FROM options";
   try{
