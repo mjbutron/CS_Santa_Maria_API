@@ -28,7 +28,7 @@ $app->get('/api/allWorkshops', function(Request $request, Response $response, ar
 // GET: Get workshops by page
 $app->get('/api/workshopsByPage/{page}', function(Request $request, Response $response, array $args){
   $page = $request->getAttribute('page');
-  $resultPerPage = 2;
+  $resultPerPage = 5;
   $start = ($page - 1) * $resultPerPage;
 
   $sql = "SELECT COUNT(*) FROM workshop";
