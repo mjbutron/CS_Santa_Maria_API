@@ -88,48 +88,60 @@ $app->get('/api/workshopsByPage/{page}', function(Request $request, Response $re
 //   }
 // });
 //
-// // PUT: Update service
-// $app->put('/admin/api/service/update/{id}', function(Request $request, Response $response, array $args){
-//    $id_service = $request->getAttribute('id');
-//    $title = $request->getParam('title');
-//    $image_home = $request->getParam('image_home');
-//    $subtitle_home = $request->getParam('subtitle_home');
-//    $description_home = $request->getParam('description_home');
-//    $home = $request->getParam('home');
-//    $image = $request->getParam('image');
-//    $subtitle = $request->getParam('subtitle');
-//    $description = $request->getParam('description');
-//    $user = $request->getParam('user');
-//
-//   $sql= "UPDATE service SET
-//           title = :title,
-//           image_home = :image_home,
-//           subtitle_home = :subtitle_home,
-//           description_home = :description_home,
-//           home = :home,
-//           image = :image,
-//           subtitle = :subtitle,
-//           description = :description,
-//           user_id = :user
-//           WHERE id = $id_service";
-//
-//   try{
-//     $res = $this->db->prepare($sql);
-//     $res->bindParam(':title', $title);
-//     $res->bindParam(':image_home', $image_home);
-//     $res->bindParam(':subtitle_home', $subtitle_home);
-//     $res->bindParam(':description_home', $description_home);
-//     $res->bindParam(':home', $home);
-//     $res->bindParam(':image', $image);
-//     $res->bindParam(':subtitle', $subtitle);
-//     $res->bindParam(':description', $description);
-//     $res->bindParam(':user', $user);
-//     $res->execute();
-//     return $this->response->withJson(['cod' => '200', 'message' => 'Servicio actualizado.']);
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
+// PUT: Update workshops
+$app->put('/admin/api/workshops/update/{id}', function(Request $request, Response $response, array $args){
+   $id_workshop = $request->getAttribute('id');
+   $home = $request->getParam('home');
+   $title = $request->getParam('title');
+   $description_home = $request->getParam('description_home');
+   $image = $request->getParam('image');
+   $subtitle = $request->getParam('subtitle');
+   $price = $request->getParam('price');
+   $address = $request->getParam('address');
+   $session_date = $request->getParam('session_date');
+   $session_start = $request->getParam('session_start');
+   $session_end = $request->getParam('session_end');
+   $sessions = $request->getParam('sessions');
+   $description = $request->getParam('description');
+   $user_id = $request->getParam('user_id');
+
+  $sql= "UPDATE workshop SET
+          home = :home,
+          title = :title,
+          description_home = :description_home,
+          image = :image,
+          subtitle = :subtitle,
+          price = :price,
+          address = :address,
+          session_date = :session_date,
+          session_start = :session_start,
+          session_end = :session_end,
+          sessions = :sessions,
+          description = :description,
+          user_id = :user_id
+          WHERE id = $id_workshop";
+
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':home', $home);
+    $res->bindParam(':title', $title);
+    $res->bindParam(':description_home', $description_home);
+    $res->bindParam(':image', $image);
+    $res->bindParam(':subtitle', $subtitle);
+    $res->bindParam(':price', $price);
+    $res->bindParam(':address', $address);
+    $res->bindParam(':session_date', $session_date);
+    $res->bindParam(':session_start', $session_start);
+    $res->bindParam(':session_end', $session_end);
+    $res->bindParam(':sessions', $sessions);
+    $res->bindParam(':description', $description);
+    $res->bindParam(':user_id', $user_id);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Taller actualizado.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
 
 ?>
