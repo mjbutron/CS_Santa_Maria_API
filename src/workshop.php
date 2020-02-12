@@ -178,4 +178,21 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
   }
 });
 
+// DELETE: Delete workshop by ID
+$app->delete('/admin/api/workshops/delete/{id}', function(Request $request, Response $response, array $args){
+  $id_workshop = $request->getAttribute('id');
+  $sql = "DELETE FROM workshop WHERE id = $id_workshop";
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':id', $id_workshop);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Taller eliminado.']);
+    
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
+
 ?>
