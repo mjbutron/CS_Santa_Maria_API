@@ -7,7 +7,7 @@ use \Firebase\JWT\JWT;
 
 // GET: Get all opinions
 $app->get('/api/allOpinion', function(Request $request, Response $response, array $args){
-  $sql = "SELECT * FROM opinion ORDER BY create_date ASC";
+  $sql = "SELECT * FROM opinion ORDER BY create_date DESC";
   try{
     $res = $this->db->prepare($sql);
     $res->execute();
@@ -25,157 +25,124 @@ $app->get('/api/allOpinion', function(Request $request, Response $response, arra
   }
 });
 
-// GET: Get workshops by page
-// $app->get('/api/workshopsByPage/{page}', function(Request $request, Response $response, array $args){
-//   $page = $request->getAttribute('page');
-//   $resultPerPage = 5;
-//   $start = ($page - 1) * $resultPerPage;
-//
-//   $sql = "SELECT COUNT(*) FROM workshop";
-//   $sqlPage = "SELECT * FROM workshop ORDER BY session_date ASC LIMIT $start, $resultPerPage";
-//   try{
-//     $res = $this->db->prepare($sql);
-//     $res->execute();
-//     $count = $res->fetchColumn();
-//
-//     if($count) {
-//       $res = $this->db->prepare($sqlPage);
-//       $res->execute();
-//       $workshops = $res->fetchAll(PDO::FETCH_OBJ);
-//       return $this->response->withJson(['allWorkshops' => $workshops, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
-//     }else{
-//       return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-//     }
-//
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
+// GET: Get opinions by page
+$app->get('/api/opinionsByPage/{page}', function(Request $request, Response $response, array $args){
+  $page = $request->getAttribute('page');
+  $resultPerPage = 5;
+  $start = ($page - 1) * $resultPerPage;
+
+  $sql = "SELECT COUNT(*) FROM opinion";
+  $sqlPage = "SELECT * FROM opinion ORDER BY create_date DESC LIMIT $start, $resultPerPage";
+  try{
+    $res = $this->db->prepare($sql);
+    $res->execute();
+    $count = $res->fetchColumn();
+
+    if($count) {
+      $res = $this->db->prepare($sqlPage);
+      $res->execute();
+      $opinions = $res->fetchAll(PDO::FETCH_OBJ);
+      return $this->response->withJson(['allOpinions' => $opinions, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
+    }else{
+      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
+    }
+
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
 
 
-// // POST: Add new workshops
-// $app->post('/admin/api/workshops/new', function(Request $request, Response $response, array $args){
-//   $home = $request->getParam('home');
-//   $title = $request->getParam('title');
-//   $description_home = $request->getParam('description_home');
-//   $image = $request->getParam('image');
-//   $subtitle = $request->getParam('subtitle');
-//   $price = $request->getParam('price');
-//   $address = $request->getParam('address');
-//   $session_date = $request->getParam('session_date');
-//   $session_start = $request->getParam('session_start');
-//   $session_end = $request->getParam('session_end');
-//   $sessions = $request->getParam('sessions');
-//   $description = $request->getParam('description');
-//   $user_id = $request->getParam('user_id');
-//
-//   $sql = "INSERT INTO workshop (
-//             home,
-//             title,
-//             description_home,
-//             image,
-//             subtitle,
-//             price,
-//             address,
-//             session_date,
-//             session_start,
-//             session_end,
-//             sessions,
-//             description,
-//             user_id)
-//           VALUES (
-//             :home,
-//             :title,
-//             :description_home,
-//             :image,
-//             :subtitle,
-//             :price,
-//             :address,
-//             :session_date,
-//             :session_start,
-//             :session_end,
-//             :sessions,
-//             :description,
-//             :user_id)";
-//
-//   try{
-//     $res = $this->db->prepare($sql);
-//     $res->bindParam(':home', $home);
-//     $res->bindParam(':title', $title);
-//     $res->bindParam(':description_home', $description_home);
-//     $res->bindParam(':image', $image);
-//     $res->bindParam(':subtitle', $subtitle);
-//     $res->bindParam(':price', $price);
-//     $res->bindParam(':address', $address);
-//     $res->bindParam(':session_date', $session_date);
-//     $res->bindParam(':session_start', $session_start);
-//     $res->bindParam(':session_end', $session_end);
-//     $res->bindParam(':sessions', $sessions);
-//     $res->bindParam(':description', $description);
-//     $res->bindParam(':user_id', $user_id);
-//     $res->execute();
-//     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo taller creado.']);
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
-//
-// // PUT: Update workshops
-// $app->put('/admin/api/workshops/update/{id}', function(Request $request, Response $response, array $args){
-//    $id_workshop = $request->getAttribute('id');
-//    $home = $request->getParam('home');
-//    $title = $request->getParam('title');
-//    $description_home = $request->getParam('description_home');
-//    $image = $request->getParam('image');
-//    $subtitle = $request->getParam('subtitle');
-//    $price = $request->getParam('price');
-//    $address = $request->getParam('address');
-//    $session_date = $request->getParam('session_date');
-//    $session_start = $request->getParam('session_start');
-//    $session_end = $request->getParam('session_end');
-//    $sessions = $request->getParam('sessions');
-//    $description = $request->getParam('description');
-//    $user_id = $request->getParam('user_id');
-//
-//   $sql= "UPDATE workshop SET
-//           home = :home,
-//           title = :title,
-//           description_home = :description_home,
-//           image = :image,
-//           subtitle = :subtitle,
-//           price = :price,
-//           address = :address,
-//           session_date = :session_date,
-//           session_start = :session_start,
-//           session_end = :session_end,
-//           sessions = :sessions,
-//           description = :description,
-//           user_id = :user_id
-//           WHERE id = $id_workshop";
-//
-//   try{
-//     $res = $this->db->prepare($sql);
-//     $res->bindParam(':home', $home);
-//     $res->bindParam(':title', $title);
-//     $res->bindParam(':description_home', $description_home);
-//     $res->bindParam(':image', $image);
-//     $res->bindParam(':subtitle', $subtitle);
-//     $res->bindParam(':price', $price);
-//     $res->bindParam(':address', $address);
-//     $res->bindParam(':session_date', $session_date);
-//     $res->bindParam(':session_start', $session_start);
-//     $res->bindParam(':session_end', $session_end);
-//     $res->bindParam(':sessions', $sessions);
-//     $res->bindParam(':description', $description);
-//     $res->bindParam(':user_id', $user_id);
-//     $res->execute();
-//     return $this->response->withJson(['cod' => '200', 'message' => 'Taller actualizado.']);
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
+// POST: Add new opinion
+$app->post('/admin/api/opinions/new', function(Request $request, Response $response, array $args){
+  $home = $request->getParam('home');
+  $image = $request->getParam('image');
+  $name = $request->getParam('name');
+  $commentary = $request->getParam('commentary');
+  $rating = $request->getParam('rating');
+  $user_id = $request->getParam('user_id');
+
+  $sql = "INSERT INTO opinion (
+            home,
+            image,
+            name,
+            commentary,
+            rating,
+            user_id)
+          VALUES (
+            :home,
+            :image,
+            :name,
+            :commentary,
+            :rating,
+            :user_id)";
+
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':home', $home);
+    $res->bindParam(':image', $image);
+    $res->bindParam(':name', $name);
+    $res->bindParam(':commentary', $commentary);
+    $res->bindParam(':rating', $rating);
+    $res->bindParam(':user_id', $user_id);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Nueva opinión creada.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
+// PUT: Update opinion
+$app->put('/admin/api/opinions/update/{id}', function(Request $request, Response $response, array $args){
+   $id_opinion = $request->getAttribute('id');
+   $home = $request->getParam('home');
+   $image = $request->getParam('image');
+   $name = $request->getParam('name');
+   $commentary = $request->getParam('commentary');
+   $rating = $request->getParam('rating');
+   $user_id = $request->getParam('user_id');
+
+  $sql= "UPDATE opinion SET
+          home = :home,
+          image = :image,
+          name = :name,
+          commentary = :commentary,
+          rating = :rating,
+          user_id = :user_id
+          WHERE id = $id_opinion";
+
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':home', $home);
+    $res->bindParam(':image', $image);
+    $res->bindParam(':name', $name);
+    $res->bindParam(':commentary', $commentary);
+    $res->bindParam(':rating', $rating);
+    $res->bindParam(':user_id', $user_id);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Opinión actualizada.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
+// DELETE: Delete opinion by ID
+$app->delete('/admin/api/opinions/delete/{id}', function(Request $request, Response $response, array $args){
+  $id_opinion = $request->getAttribute('id');
+  $sql = "DELETE FROM opinion WHERE id = $id_opinion";
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':id', $id_opinion);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Opinión eliminada.']);
+
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
 
 ?>

@@ -187,12 +187,11 @@ $app->delete('/admin/api/workshops/delete/{id}', function(Request $request, Resp
     $res->bindParam(':id', $id_workshop);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Taller eliminado.']);
-    
+
     $res = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
 });
-
 
 ?>
