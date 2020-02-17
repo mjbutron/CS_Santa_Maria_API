@@ -28,7 +28,7 @@ $app->get('/api/courses', function(Request $request, Response $response, array $
 // GET: Get courses by page
 $app->get('/api/coursesByPage/{page}', function(Request $request, Response $response, array $args){
   $page = $request->getAttribute('page');
-  $resultPerPage = 2;
+  $resultPerPage = 5;
   $start = ($page - 1) * $resultPerPage;
 
   $sql = "SELECT COUNT(*) FROM course";
@@ -53,83 +53,158 @@ $app->get('/api/coursesByPage/{page}', function(Request $request, Response $resp
   }
 });
 
-//
-// // POST: Add new service
-// $app->post('/admin/api/service/new', function(Request $request, Response $response, array $args){
-//    $title = $request->getParam('title');
-//    $image_home = $request->getParam('image_home');
-//    $subtitle_home = $request->getParam('subtitle_home');
-//    $description_home = $request->getParam('description_home');
-//    $home = $request->getParam('home');
-//    $image = $request->getParam('image');
-//    $subtitle = $request->getParam('subtitle');
-//    $description = $request->getParam('description');
-//    $user = $request->getParam('user');
-//
-//   $sql = "INSERT INTO service (title, image_home, subtitle_home, description_home, home, image, subtitle, description, create_date, update_date, user_id)
-//   VALUES (:title, :image_home, :subtitle_home, :description_home, :home, :image, :subtitle, :description,  CURRENT_TIMESTAMP(),  CURRENT_TIMESTAMP(), :user)";
-//
-//   try{
-//     $res = $this->db->prepare($sql);
-//     $res->bindParam(':title', $title);
-//     $res->bindParam(':image_home', $image_home);
-//     $res->bindParam(':subtitle_home', $subtitle_home);
-//     $res->bindParam(':description_home', $description_home);
-//     $res->bindParam(':home', $home);
-//     $res->bindParam(':image', $image);
-//     $res->bindParam(':subtitle', $subtitle);
-//     $res->bindParam(':description', $description);
-//     $res->bindParam(':user', $user);
-//     $res->execute();
-//     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo servicio creado.']);
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
-//
-// // PUT: Update service
-// $app->put('/admin/api/service/update/{id}', function(Request $request, Response $response, array $args){
-//    $id_service = $request->getAttribute('id');
-//    $title = $request->getParam('title');
-//    $image_home = $request->getParam('image_home');
-//    $subtitle_home = $request->getParam('subtitle_home');
-//    $description_home = $request->getParam('description_home');
-//    $home = $request->getParam('home');
-//    $image = $request->getParam('image');
-//    $subtitle = $request->getParam('subtitle');
-//    $description = $request->getParam('description');
-//    $user = $request->getParam('user');
-//
-//   $sql= "UPDATE service SET
-//           title = :title,
-//           image_home = :image_home,
-//           subtitle_home = :subtitle_home,
-//           description_home = :description_home,
-//           home = :home,
-//           image = :image,
-//           subtitle = :subtitle,
-//           description = :description,
-//           user_id = :user
-//           WHERE id = $id_service";
-//
-//   try{
-//     $res = $this->db->prepare($sql);
-//     $res->bindParam(':title', $title);
-//     $res->bindParam(':image_home', $image_home);
-//     $res->bindParam(':subtitle_home', $subtitle_home);
-//     $res->bindParam(':description_home', $description_home);
-//     $res->bindParam(':home', $home);
-//     $res->bindParam(':image', $image);
-//     $res->bindParam(':subtitle', $subtitle);
-//     $res->bindParam(':description', $description);
-//     $res->bindParam(':user', $user);
-//     $res->execute();
-//     return $this->response->withJson(['cod' => '200', 'message' => 'Servicio actualizado.']);
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
+// POST: Add new course
+$app->post('/admin/api/courses/new', function(Request $request, Response $response, array $args){
+  $title = $request->getParam('title');
+  $description = $request->getParam('description');
+  $image = $request->getParam('image');
+  $new_course = $request->getParam('new_course');
+  $offer = $request->getParam('offer');
+  $session_date = $request->getParam('session_date');
+  $session_start = $request->getParam('session_start');
+  $session_end = $request->getParam('session_end');
+  $sessions = $request->getParam('sessions');
+  $hours = $request->getParam('hours');
+  $level = $request->getParam('level');
+  $places = $request->getParam('places');
+  $free_places = $request->getParam('free_places');
+  $price = $request->getParam('price');
+  $user_id = $request->getParam('user_id');
+
+  $sql = "INSERT INTO course (
+            title,
+            description,
+            image,
+            new_course,
+            offer,
+            session_date,
+            session_start,
+            session_end,
+            sessions,
+            hours,
+            level,
+            places,
+            free_places,
+            price,
+            user_id)
+          VALUES (
+            :title,
+            :description,
+            :image,
+            :new_course,
+            :offer,
+            :session_date,
+            :session_start,
+            :session_end,
+            :sessions,
+            :hours,
+            :level,
+            :places,
+            :free_places,
+            :price,
+            :user_id)";
+
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':title', $title);
+    $res->bindParam(':description', $description);
+    $res->bindParam(':image', $image);
+    $res->bindParam(':new_course', $new_course);
+    $res->bindParam(':offer', $offer);
+    $res->bindParam(':session_date', $session_date);
+    $res->bindParam(':session_start', $session_start);
+    $res->bindParam(':session_end', $session_end);
+    $res->bindParam(':sessions', $sessions);
+    $res->bindParam(':hours', $hours);
+    $res->bindParam(':level', $level);
+    $res->bindParam(':places', $places);
+    $res->bindParam(':free_places', $free_places);
+    $res->bindParam(':price', $price);
+    $res->bindParam(':user_id', $user_id);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo curso creado.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
+// PUT: Update course
+$app->put('/admin/api/courses/update/{id}', function(Request $request, Response $response, array $args){
+   $id_course = $request->getAttribute('id');
+   $title = $request->getParam('title');
+   $description = $request->getParam('description');
+   $image = $request->getParam('image');
+   $new_course = $request->getParam('new_course');
+   $offer = $request->getParam('offer');
+   $session_date = $request->getParam('session_date');
+   $session_start = $request->getParam('session_start');
+   $session_end = $request->getParam('session_end');
+   $sessions = $request->getParam('sessions');
+   $hours = $request->getParam('hours');
+   $level = $request->getParam('level');
+   $places = $request->getParam('places');
+   $free_places = $request->getParam('free_places');
+   $price = $request->getParam('price');
+   $user_id = $request->getParam('user_id');
+
+  $sql= "UPDATE course SET
+          title = :title,
+          description = :description,
+          image = :image,
+          new_course = :new_course,
+          offer = :offer,
+          session_date = :session_date,
+          session_start = :session_start,
+          session_end = :session_end,
+          sessions = :sessions,
+          hours = :hours,
+          level = :level,
+          places = :places,
+          free_places = :free_places,
+          price = :price,
+          user_id = :user_id
+          WHERE id = $id_course";
+
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':title', $title);
+    $res->bindParam(':description', $description);
+    $res->bindParam(':image', $image);
+    $res->bindParam(':new_course', $new_course);
+    $res->bindParam(':offer', $offer);
+    $res->bindParam(':session_date', $session_date);
+    $res->bindParam(':session_start', $session_start);
+    $res->bindParam(':session_end', $session_end);
+    $res->bindParam(':sessions', $sessions);
+    $res->bindParam(':hours', $hours);
+    $res->bindParam(':level', $level);
+    $res->bindParam(':places', $places);
+    $res->bindParam(':free_places', $free_places);
+    $res->bindParam(':price', $price);
+    $res->bindParam(':user_id', $user_id);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Curso actualizado.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
+// DELETE: Delete course by ID
+$app->delete('/admin/api/courses/delete/{id}', function(Request $request, Response $response, array $args){
+  $id_course = $request->getAttribute('id');
+  $sql = "DELETE FROM course WHERE id = $id_course";
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':id', $id_course);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Curso eliminado.']);
+
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
 
 ?>
