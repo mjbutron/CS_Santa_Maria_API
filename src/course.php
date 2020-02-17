@@ -60,6 +60,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
   $image = $request->getParam('image');
   $new_course = $request->getParam('new_course');
   $offer = $request->getParam('offer');
+  $address = $request->getParam('address');
   $session_date = $request->getParam('session_date');
   $session_start = $request->getParam('session_start');
   $session_end = $request->getParam('session_end');
@@ -77,6 +78,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
             image,
             new_course,
             offer,
+            address,
             session_date,
             session_start,
             session_end,
@@ -93,6 +95,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
             :image,
             :new_course,
             :offer,
+            :address,
             :session_date,
             :session_start,
             :session_end,
@@ -111,6 +114,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
     $res->bindParam(':image', $image);
     $res->bindParam(':new_course', $new_course);
     $res->bindParam(':offer', $offer);
+    $res->bindParam(':address', $address);
     $res->bindParam(':session_date', $session_date);
     $res->bindParam(':session_start', $session_start);
     $res->bindParam(':session_end', $session_end);
@@ -137,6 +141,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
    $image = $request->getParam('image');
    $new_course = $request->getParam('new_course');
    $offer = $request->getParam('offer');
+   $address = $request->getParam('address');
    $session_date = $request->getParam('session_date');
    $session_start = $request->getParam('session_start');
    $session_end = $request->getParam('session_end');
@@ -154,6 +159,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
           image = :image,
           new_course = :new_course,
           offer = :offer,
+          address = :address,
           session_date = :session_date,
           session_start = :session_start,
           session_end = :session_end,
@@ -173,6 +179,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
     $res->bindParam(':image', $image);
     $res->bindParam(':new_course', $new_course);
     $res->bindParam(':offer', $offer);
+    $res->bindParam(':address', $address);
     $res->bindParam(':session_date', $session_date);
     $res->bindParam(':session_start', $session_start);
     $res->bindParam(':session_end', $session_end);
