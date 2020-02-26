@@ -22,6 +22,7 @@ require __DIR__ . '/../src/homeinfo.php';
 require __DIR__ . '/../src/footerinfo.php';
 require __DIR__ . '/../src/contact.php';
 require __DIR__ . '/../src/opinion.php';
+require __DIR__ . '/../src/aboutus.php';
 
 $app->run();
 
