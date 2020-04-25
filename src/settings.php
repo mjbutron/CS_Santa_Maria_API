@@ -10,7 +10,7 @@ return [
         ],
         // JWT settings
         'jwt' => [
-           'secret' => 'supersecretkeyyoushouldnotcommittogithub'
+           'secret' => '****'
        ]
     ],
 ];

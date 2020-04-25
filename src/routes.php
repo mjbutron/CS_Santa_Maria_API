@@ -7,7 +7,12 @@ use \Firebase\JWT\JWT;
 $app->post('/login', function (Request $request, Response $response, array $args) {
 
     $input = $request->getParsedBody();
-    $sql = "SELECT id, name, surname, email, telephone, password FROM user WHERE email= :email";
+    //$sql = "SELECT id, name, surname, email, telephone, password FROM user WHERE email= :email";
+    $sql = "SELECT u.id, u.name, u.surname, u.email, u.telephone, u.password, r.rol_name
+            FROM user u
+            INNER JOIN rol r
+            ON u.rol_id = r.id
+            WHERE u.email= :email";
     $sth = $this->db->prepare($sql);
     $sth->bindParam("email", $input['email']);
     $sth->execute();
