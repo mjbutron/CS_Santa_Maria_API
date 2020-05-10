@@ -68,3 +68,49 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
 });
+
+// POST: Check current password
+$app->post('/admin/api/checkPassword', function(Request $request, Response $response, array $args){
+  $input = $request->getParsedBody();
+  $sql = "SELECT id, password FROM user WHERE id= :id";
+  try{
+    $input = $request->getParsedBody();
+    $res = $this->db->prepare($sql);
+    $res->bindParam("id", $input['id']);
+    $res->execute();
+    $user = $res->fetchObject();
+
+    // verify password.
+    if (!password_verify($input['password'],$user->password)) {
+      return $this->response->withJson(['check' => 0]);
+    }
+
+    return $this->response->withJson(['check' => 1]);
+
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
+// PUT: Update password
+$app->put('/admin/api/userProfile/updatePass/{id}', function(Request $request, Response $response, array $args){
+   $id = $request->getAttribute('id');
+   $password = $request->getParam('password');
+   $password = password_hash($password, PASSWORD_DEFAULT);
+
+  $sql = "UPDATE user SET
+          password = :password
+        WHERE id = $id";
+
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':password', $password);
+
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
