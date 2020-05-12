@@ -4,6 +4,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use \Firebase\JWT\JWT;
 
+// POST: Login
 $app->post('/login', function (Request $request, Response $response, array $args) {
 
     $input = $request->getParsedBody();
@@ -38,4 +39,26 @@ $app->post('/login', function (Request $request, Response $response, array $args
     $user->password = "";
     return $this->response->withJson(['token' => $token, 'user' => $user]);
 
+});
+
+// PUT: Logout
+$app->put('/admin/logout', function(Request $request, Response $response, array $args){
+   $input = $request->getParsedBody();
+   $today = date("Y-m-d");
+
+  $sql = "UPDATE user SET
+          last_login = :lastday
+        WHERE email = :email";
+
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam("lastday", $today);
+    $res->bindParam("email", $input['email']);
+    $res->execute();
+
+    return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
 });
