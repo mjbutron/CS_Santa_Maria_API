@@ -39,6 +39,9 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
    $province = $request->getParam('province');
    $zipcode = $request->getParam('zipcode');
    $aboutme = $request->getParam('aboutme');
+   $userFcbk = $request->getParam('userFcbk');
+   $userYtube = $request->getParam('userYtube');
+   $userInsta = $request->getParam('userInsta');
 
   $sql = "UPDATE user SET
           name = :name,
@@ -48,7 +51,10 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
           city = :city,
           province = :province,
           zipcode = :zipcode,
-          aboutme = :aboutme
+          aboutme = :aboutme,
+          user_fcbk = :userFcbk,
+          user_ytube = :userYtube,
+          user_insta = :userInsta
         WHERE id = $id";
 
   try{
@@ -61,6 +67,9 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
     $res->bindParam(':province', $province);
     $res->bindParam(':zipcode', $zipcode);
     $res->bindParam(':aboutme', $aboutme);
+    $res->bindParam(':userFcbk', $userFcbk);
+    $res->bindParam(':userYtube', $userYtube);
+    $res->bindParam(':userInsta', $userInsta);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
     $res = null;
