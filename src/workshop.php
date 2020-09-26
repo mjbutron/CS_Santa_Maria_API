@@ -53,7 +53,6 @@ $app->get('/api/workshopsByPage/{page}', function(Request $request, Response $re
   }
 });
 
-
 // POST: Add new workshops
 $app->post('/admin/api/workshops/new', function(Request $request, Response $response, array $args){
   $home = $request->getParam('home');

@@ -23,6 +23,7 @@ require __DIR__ . '/../src/footerinfo.php';
 require __DIR__ . '/../src/contact.php';
 require __DIR__ . '/../src/opinion.php';
 require __DIR__ . '/../src/aboutus.php';
+require __DIR__ . '/../src/roles.php';
 
 $app->run();
 
