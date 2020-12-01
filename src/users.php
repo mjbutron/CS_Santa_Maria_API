@@ -35,7 +35,7 @@ $app->get('/api/usersByPage/{page}', function(Request $request, Response $respon
   $sqlPage = "SELECT u.id, u.active, u.name, u.surname, u.email, u.telephone,
                      u.address, u.city, u.province, u.zipcode, u.aboutme, u.password,
                      u.user_fcbk, u.user_ytube, u.user_insta, u.image, u.last_login,
-                     u.create_date, u.update_date, r.rol_name
+                     u.create_date, u.update_date, r.id as rol_id, r.rol_name
               FROM user u, rol r
               WHERE u.rol_id = r.id
               ORDER BY surname ASC LIMIT $start, $resultPerPage";
@@ -59,6 +59,68 @@ $app->get('/api/usersByPage/{page}', function(Request $request, Response $respon
   }
 });
 
+// POST: Add new user
+$app->post('/admin/api/users/new', function(Request $request, Response $response, array $args){
+  $name = $request->getParam('name');
+  $surname = $request->getParam('surname');
+  $email = $request->getParam('email');
+  $telephone = $request->getParam('telephone');
+  $address = $request->getParam('address');
+  $city = $request->getParam('city');
+  $province = $request->getParam('province');
+  $zipcode = $request->getParam('zipcode');
+  $rol_id = $request->getParam('rol_id');
+
+  $settings = $this->get('settings'); // get settings array.
+
+
+  $password =   $settings['default']['pass'];
+  $password = password_hash($password, PASSWORD_DEFAULT);
+
+  $sql = "INSERT INTO user (
+            name,
+            surname,
+            email,
+            telephone,
+            address,
+            city,
+            province,
+            zipcode,
+            password,
+            rol_id)
+          VALUES (
+            :name,
+            :surname,
+            :email,
+            :telephone,
+            :address,
+            :city,
+            :province,
+            :zipcode,
+            :password,
+            :rol_id)";
+
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':name', $name);
+    $res->bindParam(':surname', $surname);
+    $res->bindParam(':email', $email);
+    $res->bindParam(':telephone', $telephone);
+    $res->bindParam(':address', $address);
+    $res->bindParam(':city', $city);
+    $res->bindParam(':province', $province);
+    $res->bindParam(':zipcode', $zipcode);
+    $res->bindParam(':password', $password);
+    $res->bindParam(':rol_id', $rol_id);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo usuario creado.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
+
+
 // DELETE: Delete user by ID
 $app->delete('/admin/api/users/delete/{id}', function(Request $request, Response $response, array $args){
   $id_user = $request->getAttribute('id');
@@ -76,100 +138,48 @@ $app->delete('/admin/api/users/delete/{id}', function(Request $request, Response
 });
 
 // PUT: Update user profile
-// $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Response $response, array $args){
-//    $id = $request->getAttribute('id');
-//    $name = $request->getParam('name');
-//    $surname = $request->getParam('surname');
-//    $telephone = $request->getParam('telephone');
-//    $address = $request->getParam('address');
-//    $city = $request->getParam('city');
-//    $province = $request->getParam('province');
-//    $zipcode = $request->getParam('zipcode');
-//    $aboutme = $request->getParam('aboutme');
-//    $userFcbk = $request->getParam('userFcbk');
-//    $userYtube = $request->getParam('userYtube');
-//    $userInsta = $request->getParam('userInsta');
-//    $image = $request->getParam('image');
-//
-//   $sql = "UPDATE user SET
-//           name = :name,
-//           surname = :surname,
-//           telephone = :telephone,
-//           address = :address,
-//           city = :city,
-//           province = :province,
-//           zipcode = :zipcode,
-//           aboutme = :aboutme,
-//           user_fcbk = :userFcbk,
-//           user_ytube = :userYtube,
-//           user_insta = :userInsta,
-//           image = :image
-//         WHERE id = $id";
-//
-//   try{
-//     $res = $this->db->prepare($sql);
-//     $res->bindParam(':name', $name);
-//     $res->bindParam(':surname', $surname);
-//     $res->bindParam(':telephone', $telephone);
-//     $res->bindParam(':address', $address);
-//     $res->bindParam(':city', $city);
-//     $res->bindParam(':province', $province);
-//     $res->bindParam(':zipcode', $zipcode);
-//     $res->bindParam(':aboutme', $aboutme);
-//     $res->bindParam(':userFcbk', $userFcbk);
-//     $res->bindParam(':userYtube', $userYtube);
-//     $res->bindParam(':userInsta', $userInsta);
-//     $res->bindParam(':image', $image);
-//     $res->execute();
-//     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
+$app->put('/admin/api/users/update/{id}', function(Request $request, Response $response, array $args){
+   $id = $request->getAttribute('id');
+   $active = $request->getParam('active');
+   $name = $request->getParam('name');
+   $surname = $request->getParam('surname');
+   $email = $request->getParam('email');
+   $telephone = $request->getParam('telephone');
+   $address = $request->getParam('address');
+   $city = $request->getParam('city');
+   $province = $request->getParam('province');
+   $zipcode = $request->getParam('zipcode');
+   $rol_id = $request->getParam('rol_id');
 
-// POST: Check current password
-// $app->post('/admin/api/checkPassword', function(Request $request, Response $response, array $args){
-//   $input = $request->getParsedBody();
-//   $sql = "SELECT id, password FROM user WHERE id= :id";
-//   try{
-//     $input = $request->getParsedBody();
-//     $res = $this->db->prepare($sql);
-//     $res->bindParam("id", $input['id']);
-//     $res->execute();
-//     $user = $res->fetchObject();
-//
-//     // verify password.
-//     if (!password_verify($input['password'],$user->password)) {
-//       return $this->response->withJson(['check' => 0]);
-//     }
-//
-//     return $this->response->withJson(['check' => 1]);
-//
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
+  $sql = "UPDATE user SET
+          active = :active,
+          name = :name,
+          surname = :surname,
+          email = :email,
+          telephone = :telephone,
+          address = :address,
+          city = :city,
+          province = :province,
+          zipcode = :zipcode,
+          rol_id = :rol_id
+        WHERE id = $id";
 
-// PUT: Update password
-// $app->put('/admin/api/userProfile/updatePass/{id}', function(Request $request, Response $response, array $args){
-//    $id = $request->getAttribute('id');
-//    $password = $request->getParam('password');
-//    $password = password_hash($password, PASSWORD_DEFAULT);
-//
-//   $sql = "UPDATE user SET
-//           password = :password
-//         WHERE id = $id";
-//
-//   try{
-//     $res = $this->db->prepare($sql);
-//     $res->bindParam(':password', $password);
-//
-//     $res->execute();
-//     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
-//     $res = null;
-//   }catch(PDOException $e){
-//     echo '{"error" : {"text":'.$e->getMessage().'}';
-//   }
-// });
+  try{
+    $res = $this->db->prepare($sql);
+    $res->bindParam(':active', $active);
+    $res->bindParam(':name', $name);
+    $res->bindParam(':surname', $surname);
+    $res->bindParam(':email', $email);
+    $res->bindParam(':telephone', $telephone);
+    $res->bindParam(':address', $address);
+    $res->bindParam(':city', $city);
+    $res->bindParam(':province', $province);
+    $res->bindParam(':zipcode', $zipcode);
+    $res->bindParam(':rol_id', $rol_id);
+    $res->execute();
+    return $this->response->withJson(['cod' => '200', 'message' => 'Usuario actualizado.']);
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
