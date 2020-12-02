@@ -9,7 +9,7 @@ $app->post('/login', function (Request $request, Response $response, array $args
 
     $input = $request->getParsedBody();
     //$sql = "SELECT id, name, surname, email, telephone, password FROM user WHERE email= :email";
-    $sql = "SELECT u.id, u.name, u.surname, u.email, u.telephone, u.password, r.rol_name
+    $sql = "SELECT u.id, u.active, u.name, u.surname, u.email, u.telephone, u.password, r.rol_name
             FROM user u
             INNER JOIN rol r
             ON u.rol_id = r.id
@@ -23,14 +23,21 @@ $app->post('/login', function (Request $request, Response $response, array $args
     if(!$user) {
         return $this->response->withStatus(400)
         ->withHeader('Content-Type', 'application/json')
-        ->withJson(['error' => true, 'message' => 'These credentials do not match our records.']);
+        ->withJson(['error' => true, 'message' => '¡Nombre de usuario o contraseña incorrectos!']);
     }
 
     // verify password.
     if (!password_verify($input['password'],$user->password)) {
       return $this->response->withStatus(400)
       ->withHeader('Content-Type', 'application/json')
-      ->withJson(['error' => true, 'message' => 'These credentials do not match our records.']);
+      ->withJson(['error' => true, 'message' => '¡Nombre de usuario o contraseña incorrectos!']);
+    }
+
+    // verify if user is active
+    if(0 == $user->active) {
+        return $this->response->withStatus(400)
+        ->withHeader('Content-Type', 'application/json')
+        ->withJson(['error' => true, 'message' => 'Usuario bloqueado. Contacte con el administrador.']);
     }
 
     $settings = $this->get('settings'); // get settings array.
