@@ -112,7 +112,8 @@ $app->put('/admin/api/userProfile/updatePass/{id}', function(Request $request, R
    $password = password_hash($password, PASSWORD_DEFAULT);
 
   $sql = "UPDATE user SET
-          password = :password
+          password = :password,
+          change_pass = 1
         WHERE id = $id";
 
   try{
