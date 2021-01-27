@@ -127,3 +127,25 @@ $app->put('/admin/api/userProfile/updatePass/{id}', function(Request $request, R
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
 });
+
+// POST: Get is change pass
+$app->post('/admin/api/isChangePass', function(Request $request, Response $response, array $args){
+  $sql = "SELECT change_pass FROM user WHERE email= :email";
+  try{
+    $input = $request->getParsedBody();
+    $res = $this->db->prepare($sql);
+    $res->bindParam("email", $input['email']);
+    $res->execute();
+    $isChangePass = $res->fetchObject();
+
+    if($isChangePass) {
+      return $this->response->withJson($isChangePass);
+    }else{
+      return $this->response->withJson(['cod' => '404', 'message' => 'No se ha podido realizar la consulta.']);
+    }
+
+    $res = null;
+  }catch(PDOException $e){
+    echo '{"error" : {"text":'.$e->getMessage().'}';
+  }
+});
