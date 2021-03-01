@@ -124,6 +124,7 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
 // PUT: Update workshops
 $app->put('/admin/api/workshops/update/{id}', function(Request $request, Response $response, array $args){
    $id_workshop = $request->getAttribute('id');
+   $active = $request->getParam('active');
    $home = $request->getParam('home');
    $title = $request->getParam('title');
    $description_home = $request->getParam('description_home');
@@ -139,6 +140,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
    $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE workshop SET
+          active = :active,
           home = :home,
           title = :title,
           description_home = :description_home,
@@ -156,6 +158,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
 
   try{
     $res = $this->db->prepare($sql);
+    $res->bindParam(':active', $active);
     $res->bindParam(':home', $home);
     $res->bindParam(':title', $title);
     $res->bindParam(':description_home', $description_home);
