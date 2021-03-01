@@ -136,6 +136,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
 // PUT: Update course
 $app->put('/admin/api/courses/update/{id}', function(Request $request, Response $response, array $args){
    $id_course = $request->getAttribute('id');
+   $active = $request->getParam('active');
    $title = $request->getParam('title');
    $description = $request->getParam('description');
    $image = $request->getParam('image');
@@ -154,6 +155,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
    $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE course SET
+          active = :active,
           title = :title,
           description = :description,
           image = :image,
@@ -174,6 +176,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
 
   try{
     $res = $this->db->prepare($sql);
+    $res->bindParam(':active', $active);
     $res->bindParam(':title', $title);
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
