@@ -94,6 +94,7 @@ $app->post('/admin/api/services/new', function(Request $request, Response $respo
 // PUT: Update service by ID
 $app->put('/admin/api/services/update/{id}', function(Request $request, Response $response, array $args){
    $id_service = $request->getAttribute('id');
+   $active = $request->getParam('active');
    $title = $request->getParam('title');
    $image = $request->getParam('image');
    $subtitle = $request->getParam('subtitle');
@@ -101,6 +102,7 @@ $app->put('/admin/api/services/update/{id}', function(Request $request, Response
    $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE service SET
+          active = :active,
           title = :title,
           image = :image,
           subtitle = :subtitle,
@@ -110,6 +112,7 @@ $app->put('/admin/api/services/update/{id}', function(Request $request, Response
 
   try{
     $res = $this->db->prepare($sql);
+    $res->bindParam(':active', $active);
     $res->bindParam(':title', $title);
     $res->bindParam(':image', $image);
     $res->bindParam(':subtitle', $subtitle);
