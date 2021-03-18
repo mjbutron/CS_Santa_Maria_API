@@ -1,6 +1,6 @@
 <?php
 // Configuration
-$container = $app->getContainer();
+// $container = $app->getContainer();
 
 // DB instance
 $container['db'] = function ($c) {
@@ -9,6 +9,15 @@ $container['db'] = function ($c) {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     return $pdo;
+};
+
+// Not Found handler
+$container['notFoundHandler'] = function ($c) {
+    return function ($request, $response) use ($c) {
+        return $response->withStatus(404)
+            ->withHeader('Content-Type', 'text/html')
+            ->write('Page not found');
+    };
 };
 
 ?>

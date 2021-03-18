@@ -13,13 +13,9 @@ $app->get('/api/allServices', function(Request $request, Response $response, arr
     $res->execute();
     $services = $res->fetchAll(PDO::FETCH_OBJ);
 
-    if($services) {
-      return $this->response->withJson($services);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'allServices' => $services]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -38,16 +34,12 @@ $app->get('/api/servicesByPage/{page}', function(Request $request, Response $res
     $res->execute();
     $count = $res->fetchColumn();
 
-    if($count) {
-      $res = $this->db->prepare($sqlPage);
-      $res->execute();
-      $workshops = $res->fetchAll(PDO::FETCH_OBJ);
-      return $this->response->withJson(['allServices' => $workshops, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    $res = $this->db->prepare($sqlPage);
+    $res->execute();
+    $services = $res->fetchAll(PDO::FETCH_OBJ);
+    return $this->response->withJson(['cod' => '200', 'allServices' => $services, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
     $res = null;
+    
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -84,7 +76,7 @@ $app->post('/admin/api/services/new', function(Request $request, Response $respo
     $res->bindParam(':description', $description);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo servicio creado.']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo servicio creado']);
     $res = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
@@ -119,7 +111,7 @@ $app->put('/admin/api/services/update/{id}', function(Request $request, Response
     $res->bindParam(':description', $description);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Servicio actualizado.']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Servicio actualizado']);
     $res = null;
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
@@ -134,7 +126,7 @@ $app->delete('/admin/api/services/delete/{id}', function(Request $request, Respo
     $res = $this->db->prepare($sql);
     $res->bindParam(':id', $id_service);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Servicio eliminado.']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Servicio eliminado']);
 
     $res = null;
   }catch(PDOException $e){
