@@ -39,7 +39,7 @@ $app->get('/api/servicesByPage/{page}', function(Request $request, Response $res
     $services = $res->fetchAll(PDO::FETCH_OBJ);
     return $this->response->withJson(['cod' => '200', 'allServices' => $services, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
     $res = null;
-    
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -47,13 +47,11 @@ $app->get('/api/servicesByPage/{page}', function(Request $request, Response $res
 
 // POST: Add new service
 $app->post('/admin/api/services/new', function(Request $request, Response $response, array $args){
-   $title = $request->getParam('title');
-   $image = $request->getParam('image');
-   $subtitle = $request->getParam('subtitle');
-   $description = $request->getParam('description');
-   $user_id = $request->getParam('user_id');
-
-
+  $title = $request->getParam('title');
+  $image = $request->getParam('image');
+  $subtitle = $request->getParam('subtitle');
+  $description = $request->getParam('description');
+  $user_id = $request->getParam('user_id');
 
   $sql = "INSERT INTO service (
             title,

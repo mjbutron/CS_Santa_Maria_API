@@ -13,13 +13,9 @@ $app->get('/api/allWorkshops', function(Request $request, Response $response, ar
     $res->execute();
     $workshops = $res->fetchAll(PDO::FETCH_OBJ);
 
-    if($workshops) {
-      return $this->response->withJson($workshops);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'allWorkshops' => $workshops]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -38,16 +34,12 @@ $app->get('/api/workshopsByPage/{page}', function(Request $request, Response $re
     $res->execute();
     $count = $res->fetchColumn();
 
-    if($count) {
-      $res = $this->db->prepare($sqlPage);
-      $res->execute();
-      $workshops = $res->fetchAll(PDO::FETCH_OBJ);
-      return $this->response->withJson(['allWorkshops' => $workshops, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    $res = $this->db->prepare($sqlPage);
+    $res->execute();
+    $workshops = $res->fetchAll(PDO::FETCH_OBJ);
+    return $this->response->withJson(['cod' => '200', 'allWorkshops' => $workshops, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
     $res = null;
+    
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
