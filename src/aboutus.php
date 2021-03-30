@@ -13,13 +13,9 @@ $app->get('/api/allAboutUs', function(Request $request, Response $response, arra
     $res->execute();
     $aboutus = $res->fetchAll(PDO::FETCH_OBJ);
 
-    if($aboutus) {
-      return $this->response->withJson($aboutus);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'allAboutUs' => $aboutus]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -38,16 +34,12 @@ $app->get('/api/aboutUsByPage/{page}', function(Request $request, Response $resp
     $res->execute();
     $count = $res->fetchColumn();
 
-    if($count) {
-      $res = $this->db->prepare($sqlPage);
-      $res->execute();
-      $aboutus = $res->fetchAll(PDO::FETCH_OBJ);
-      return $this->response->withJson(['allAboutUs' => $aboutus, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    $res = $this->db->prepare($sqlPage);
+    $res->execute();
+    $aboutus = $res->fetchAll(PDO::FETCH_OBJ);
+    return $this->response->withJson(['cod' => '200', 'allAboutUs' => $aboutus, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -68,7 +60,7 @@ $app->post('/admin/api/aboutus/new', function(Request $request, Response $respon
   $user_insta = $request->getParam('user_insta');
   $user_id = $request->getParam('user_id');
 
-  $sql = "INSERT INTO workshop (
+  $sql = "INSERT INTO aboutus (
             name,
             surname1,
             surname2,
