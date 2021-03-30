@@ -13,13 +13,9 @@ $app->get('/api/allOpinion', function(Request $request, Response $response, arra
     $res->execute();
     $opinions = $res->fetchAll(PDO::FETCH_OBJ);
 
-    if($opinions) {
-      return $this->response->withJson($opinions);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'allOpinions' => $opinions]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -38,16 +34,12 @@ $app->get('/api/opinionsByPage/{page}', function(Request $request, Response $res
     $res->execute();
     $count = $res->fetchColumn();
 
-    if($count) {
-      $res = $this->db->prepare($sqlPage);
-      $res->execute();
-      $opinions = $res->fetchAll(PDO::FETCH_OBJ);
-      return $this->response->withJson(['allOpinions' => $opinions, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    $res = $this->db->prepare($sqlPage);
+    $res->execute();
+    $opinions = $res->fetchAll(PDO::FETCH_OBJ);
+    return $this->response->withJson(['cod' => '200', 'allOpinions' => $opinions, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
