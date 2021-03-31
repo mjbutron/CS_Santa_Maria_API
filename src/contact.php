@@ -12,13 +12,9 @@ $app->get('/api/contact/info', function(Request $request, Response $response, ar
     $res->execute();
     $info = $res->fetchAll(PDO::FETCH_OBJ);
 
-    if($info) {
-      return $this->response->withJson($info);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'contactInfo' => $info]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
