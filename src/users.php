@@ -13,13 +13,9 @@ $app->get('/api/allUsers', function(Request $request, Response $response, array 
     $res->execute();
     $users = $res->fetchAll(PDO::FETCH_OBJ);
 
-    if($users) {
-      return $this->response->withJson($users);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'allUsers' => $users]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -44,16 +40,12 @@ $app->get('/api/usersByPage/{page}', function(Request $request, Response $respon
     $res->execute();
     $count = $res->fetchColumn();
 
-    if($count) {
-      $res = $this->db->prepare($sqlPage);
-      $res->execute();
-      $users = $res->fetchAll(PDO::FETCH_OBJ);
-      return $this->response->withJson(['allUsers' => $users, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    $res = $this->db->prepare($sqlPage);
+    $res->execute();
+    $users = $res->fetchAll(PDO::FETCH_OBJ);
+    return $this->response->withJson(['cod' => '200', 'allUsers' => $users, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }

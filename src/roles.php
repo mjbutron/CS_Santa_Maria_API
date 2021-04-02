@@ -13,13 +13,9 @@ $app->get('/api/allRoles', function(Request $request, Response $response, array 
     $res->execute();
     $roles = $res->fetchAll(PDO::FETCH_OBJ);
 
-    if($roles) {
-      return $this->response->withJson($roles);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'allRoles' => $roles]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
