@@ -13,13 +13,9 @@ $app->get('/api/allSlider', function(Request $request, Response $response, array
     $res->execute();
     $sliders = $res->fetchAll(PDO::FETCH_OBJ);
 
-    if($sliders) {
-      return $this->response->withJson($sliders);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'Datos no disponibles.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'allSliders' => $sliders]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
