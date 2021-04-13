@@ -14,38 +14,44 @@ $app->post('/login', function (Request $request, Response $response, array $args
             INNER JOIN rol r
             ON u.rol_id = r.id
             WHERE u.email= :email";
-    $sth = $this->db->prepare($sql);
-    $sth->bindParam("email", $input['email']);
-    $sth->execute();
-    $user = $sth->fetchObject();
+    try{
+      $sth = $this->db->prepare($sql);
+      $sth->bindParam("email", $input['email']);
+      $sth->execute();
+      $user = $sth->fetchObject();
 
-    // verify email address.
-    if(!$user) {
-        return $this->response->withStatus(400)
+      // verify email address.
+      if(!$user) {
+          return $this->response->withStatus(200)
+          ->withHeader('Content-Type', 'application/json')
+          ->withJson(['cod' => 200, 'error' => true, 'message' => '¡Nombre de usuario o contraseña incorrectos!']);
+      }
+
+      // verify password.
+      if (!password_verify($input['password'],$user->password)) {
+        return $this->response->withStatus(200)
         ->withHeader('Content-Type', 'application/json')
-        ->withJson(['error' => true, 'message' => '¡Nombre de usuario o contraseña incorrectos!']);
-    }
+        ->withJson(['cod' => 200, 'error' => true, 'message' => '¡Nombre de usuario o contraseña incorrectos!']);
+      }
 
-    // verify password.
-    if (!password_verify($input['password'],$user->password)) {
-      return $this->response->withStatus(400)
+      // verify if user is active
+      if(0 == $user->active) {
+          return $this->response->withStatus(200)
+          ->withHeader('Content-Type', 'application/json')
+          ->withJson(['cod' => 200, 'error' => true, 'message' => 'Usuario bloqueado. Contacte con el administrador.']);
+      }
+
+      $settings = $this->get('settings'); // get settings array.
+
+      $token = JWT::encode(['id' => $user->id, 'email' => $user->email], $settings['jwt']['secret'], "HS256");
+      $user->password = "";
+      return $this->response->withJson(['cod' => 200, 'error' => false, 'token' => $token, 'user' => $user]);
+    }catch(PDOException $e){
+      return $this->response
+      ->withStatus(503)
       ->withHeader('Content-Type', 'application/json')
-      ->withJson(['error' => true, 'message' => '¡Nombre de usuario o contraseña incorrectos!']);
+      ->withJson(['cod' => 503, 'error' => true, 'message' => 'No es posible conectar con la base de datos.']);
     }
-
-    // verify if user is active
-    if(0 == $user->active) {
-        return $this->response->withStatus(400)
-        ->withHeader('Content-Type', 'application/json')
-        ->withJson(['error' => true, 'message' => 'Usuario bloqueado. Contacte con el administrador.']);
-    }
-
-    $settings = $this->get('settings'); // get settings array.
-
-    $token = JWT::encode(['id' => $user->id, 'email' => $user->email], $settings['jwt']['secret'], "HS256");
-    $user->password = "";
-    return $this->response->withJson(['token' => $token, 'user' => $user]);
-
 });
 
 // PUT: Logout
