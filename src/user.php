@@ -138,14 +138,13 @@ $app->post('/admin/api/isChangePass', function(Request $request, Response $respo
     $res->execute();
     $isChangePass = $res->fetchObject();
 
-    if($isChangePass) {
-      return $this->response->withJson($isChangePass);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'No se ha podido realizar la consulta.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'isChangePass' => $isChangePass]);
     $res = null;
+
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response
+    ->withStatus(503)
+    ->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
