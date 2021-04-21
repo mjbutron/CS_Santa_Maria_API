@@ -69,9 +69,12 @@ $app->put('/admin/logout', function(Request $request, Response $response, array 
     $res->bindParam("email", $input['email']);
     $res->execute();
 
-    return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
+    return $this->response->withJson(['cod' => '200', 'error' => false, 'message' => 'Desconectado correctamente.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response
+    ->withStatus(503)
+    ->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'error' => true, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
