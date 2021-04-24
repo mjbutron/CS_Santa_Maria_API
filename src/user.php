@@ -16,13 +16,9 @@ $app->post('/admin/api/userProfile', function(Request $request, Response $respon
     $res->execute();
     $user = $res->fetchObject();
 
-    if($user) {
-      return $this->response->withJson($user);
-    }else{
-      return $this->response->withJson(['cod' => '404', 'message' => 'El usuario no existe.']);
-    }
-
+    return $this->response->withJson(['cod' => '200', 'user' => $user]);
     $res = null;
+
   }catch(PDOException $e){
     echo '{"error" : {"text":'.$e->getMessage().'}';
   }
@@ -94,10 +90,10 @@ $app->post('/admin/api/checkPassword', function(Request $request, Response $resp
 
     // verify password.
     if (!password_verify($input['password'],$user->password)) {
-      return $this->response->withJson(['check' => 0]);
+      return $this->response->withJson(['cod' => '200', 'check' => 0]);
     }
 
-    return $this->response->withJson(['check' => 1]);
+    return $this->response->withJson(['cod' => '200', 'check' => 1]);
 
     $res = null;
   }catch(PDOException $e){
