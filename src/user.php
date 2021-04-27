@@ -35,9 +35,9 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
    $province = $request->getParam('province');
    $zipcode = $request->getParam('zipcode');
    $aboutme = $request->getParam('aboutme');
-   $userFcbk = $request->getParam('userFcbk');
-   $userYtube = $request->getParam('userYtube');
-   $userInsta = $request->getParam('userInsta');
+   $user_fcbk = $request->getParam('user_fcbk');
+   $user_ytube = $request->getParam('user_ytube');
+   $user_insta = $request->getParam('user_insta');
    $image = $request->getParam('image');
 
   $sql = "UPDATE user SET
@@ -49,9 +49,9 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
           province = :province,
           zipcode = :zipcode,
           aboutme = :aboutme,
-          user_fcbk = :userFcbk,
-          user_ytube = :userYtube,
-          user_insta = :userInsta,
+          user_fcbk = :user_fcbk,
+          user_ytube = :user_ytube,
+          user_insta = :user_insta,
           image = :image
         WHERE id = $id";
 
@@ -65,9 +65,9 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
     $res->bindParam(':province', $province);
     $res->bindParam(':zipcode', $zipcode);
     $res->bindParam(':aboutme', $aboutme);
-    $res->bindParam(':userFcbk', $userFcbk);
-    $res->bindParam(':userYtube', $userYtube);
-    $res->bindParam(':userInsta', $userInsta);
+    $res->bindParam(':user_fcbk', $user_fcbk);
+    $res->bindParam(':user_ytube', $user_ytube);
+    $res->bindParam(':user_insta', $user_insta);
     $res->bindParam(':image', $image);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
