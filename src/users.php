@@ -17,7 +17,8 @@ $app->get('/api/allUsers', function(Request $request, Response $response, array 
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -47,7 +48,8 @@ $app->get('/api/usersByPage/{page}', function(Request $request, Response $respon
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -108,7 +110,8 @@ $app->post('/admin/api/users/new', function(Request $request, Response $response
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo usuario creado.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -125,7 +128,8 @@ $app->delete('/admin/api/users/delete/{id}', function(Request $request, Response
 
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -172,6 +176,7 @@ $app->put('/admin/api/users/update/{id}', function(Request $request, Response $r
     return $this->response->withJson(['cod' => '200', 'message' => 'Usuario actualizado.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });

@@ -17,7 +17,8 @@ $app->get('/api/allAboutUs', function(Request $request, Response $response, arra
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -41,7 +42,8 @@ $app->get('/api/aboutUsByPage/{page}', function(Request $request, Response $resp
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -102,7 +104,8 @@ $app->post('/admin/api/aboutus/new', function(Request $request, Response $respon
     return $this->response->withJson(['cod' => '200', 'message' => 'Nueva entrada creada.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -149,10 +152,11 @@ $app->put('/admin/api/aboutus/update/{id}', function(Request $request, Response 
     $res->bindParam(':user_insta', $user_insta);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Entrada actualizada.']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado la entrada.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -168,7 +172,8 @@ $app->delete('/admin/api/aboutus/delete/{id}', function(Request $request, Respon
 
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 

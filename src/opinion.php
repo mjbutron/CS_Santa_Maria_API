@@ -17,7 +17,8 @@ $app->get('/api/allOpinion', function(Request $request, Response $response, arra
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -41,7 +42,8 @@ $app->get('/api/opinionsByPage/{page}', function(Request $request, Response $res
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -82,7 +84,8 @@ $app->post('/admin/api/opinions/new', function(Request $request, Response $respo
     return $this->response->withJson(['cod' => '200', 'message' => 'Nueva opinión creada.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -114,10 +117,11 @@ $app->put('/admin/api/opinions/update/{id}', function(Request $request, Response
     $res->bindParam(':rating', $rating);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Opinión actualizada.']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado la opinión.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -133,7 +137,8 @@ $app->delete('/admin/api/opinions/delete/{id}', function(Request $request, Respo
 
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 

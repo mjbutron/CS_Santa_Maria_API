@@ -17,7 +17,8 @@ $app->get('/api/courses', function(Request $request, Response $response, array $
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -39,9 +40,10 @@ $app->get('/api/coursesByPage/{page}', function(Request $request, Response $resp
     $courses = $res->fetchAll(PDO::FETCH_OBJ);
     return $this->response->withJson(['cod' => '200', 'allCourses' => $courses, 'total' => $count, 'actual' => $page, 'totalPages' => ceil($count/$resultPerPage)]);
     $res = null;
-    
+
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -121,7 +123,8 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo curso creado.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -186,10 +189,11 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
     $res->bindParam(':price', $price);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Curso actualizado.']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado el curso.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -205,7 +209,8 @@ $app->delete('/admin/api/courses/delete/{id}', function(Request $request, Respon
 
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 

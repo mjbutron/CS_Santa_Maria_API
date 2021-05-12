@@ -17,7 +17,8 @@ $app->get('/api/allSlider', function(Request $request, Response $response, array
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -42,7 +43,8 @@ $app->post('/admin/api/slider/new', function(Request $request, Response $respons
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo Slider creado.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -77,6 +79,7 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
     return $this->response->withJson(['cod' => '200', 'message' => 'Slider actualizado.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });

@@ -47,9 +47,7 @@ $app->post('/login', function (Request $request, Response $response, array $args
       $user->password = "";
       return $this->response->withJson(['cod' => 200, 'error' => false, 'token' => $token, 'user' => $user]);
     }catch(PDOException $e){
-      return $this->response
-      ->withStatus(503)
-      ->withHeader('Content-Type', 'application/json')
+      return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
       ->withJson(['cod' => 503, 'error' => true, 'message' => 'No es posible conectar con la base de datos.']);
     }
 });
@@ -72,9 +70,7 @@ $app->put('/admin/logout', function(Request $request, Response $response, array 
     return $this->response->withJson(['cod' => '200', 'error' => false, 'message' => 'Desconectado correctamente.']);
     $res = null;
   }catch(PDOException $e){
-    return $this->response
-    ->withStatus(503)
-    ->withHeader('Content-Type', 'application/json')
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
     ->withJson(['cod' => 503, 'error' => true, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });

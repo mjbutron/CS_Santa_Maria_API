@@ -16,7 +16,8 @@ $app->get('/api/home/info', function(Request $request, Response $response, array
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -48,7 +49,8 @@ $app->put('/admin/api/home/info/update/{id}', function(Request $request, Respons
     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 

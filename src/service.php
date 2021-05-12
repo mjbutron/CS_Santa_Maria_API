@@ -17,7 +17,8 @@ $app->get('/api/allServices', function(Request $request, Response $response, arr
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -41,7 +42,8 @@ $app->get('/api/servicesByPage/{page}', function(Request $request, Response $res
     $res = null;
 
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -77,7 +79,8 @@ $app->post('/admin/api/services/new', function(Request $request, Response $respo
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo servicio creado']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -109,10 +112,11 @@ $app->put('/admin/api/services/update/{id}', function(Request $request, Response
     $res->bindParam(':description', $description);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Servicio actualizado']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado el servicio.']);
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
@@ -124,11 +128,12 @@ $app->delete('/admin/api/services/delete/{id}', function(Request $request, Respo
     $res = $this->db->prepare($sql);
     $res->bindParam(':id', $id_service);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Servicio eliminado']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Servicio eliminado.']);
 
     $res = null;
   }catch(PDOException $e){
-    echo '{"error" : {"text":'.$e->getMessage().'}';
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
   }
 });
 
