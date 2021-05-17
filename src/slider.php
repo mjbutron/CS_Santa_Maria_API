@@ -76,7 +76,7 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
     $res->bindParam(':order_slider', $order_slider);
     $res->bindParam(':user', $user);
     $res->execute();
-    return $this->response->withJson(['cod' => '200', 'message' => 'Slider actualizado.']);
+    return $this->response->withJson(['cod' => '200', 'message' => 'Se ha editado la cabecera.']);
     $res = null;
   }catch(PDOException $e){
     return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
