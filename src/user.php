@@ -128,17 +128,23 @@ $app->put('/admin/api/userProfile/updatePass/{id}', function(Request $request, R
   }
 });
 
-// POST: Get is change pass
-$app->post('/admin/api/isChangePass', function(Request $request, Response $response, array $args){
-  $sql = "SELECT change_pass FROM user WHERE email= :email";
+// POST: Get user data
+$app->post('/admin/api/userData', function(Request $request, Response $response, array $args){
+  $sql = "SELECT u.id, u.active, u.name, u.surname, u.email, u.telephone,
+                  u.address, u.city, u.province, u.zipcode, u.aboutme,
+                  u.password, u.change_pass, u.image, r.rol_name
+          FROM user u
+          INNER JOIN rol r
+          ON u.rol_id = r.id
+          WHERE u.email= :email";
   try{
     $input = $request->getParsedBody();
     $res = $this->db->prepare($sql);
     $res->bindParam("email", $input['email']);
     $res->execute();
-    $isChangePass = $res->fetchObject();
+    $userData = $res->fetchObject();
 
-    return $this->response->withJson(['cod' => '200', 'isChangePass' => $isChangePass]);
+    return $this->response->withJson(['cod' => '200', 'userData' => $userData]);
     $res = null;
 
   }catch(PDOException $e){
