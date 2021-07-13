@@ -31,6 +31,7 @@ $app->put('/admin/api/contact/info/update/{id}', function(Request $request, Resp
    $cnt_ph_physio = $request->getParam('cnt_ph_physio');
    $cnt_lat = $request->getParam('cnt_lat');
    $cnt_lon = $request->getParam('cnt_lon');
+   $user_id = $request->getParam('user_id');
 
   $sql = "UPDATE options SET
           cnt_address = :cnt_address,
@@ -39,7 +40,8 @@ $app->put('/admin/api/contact/info/update/{id}', function(Request $request, Resp
           cnt_ph_mwives = :cnt_ph_mwives,
           cnt_ph_physio = :cnt_ph_physio,
           cnt_lat = :cnt_lat,
-          cnt_lon = :cnt_lon
+          cnt_lon = :cnt_lon,
+          user_id = :user_id
         WHERE id = $id";
 
   try{
@@ -51,6 +53,7 @@ $app->put('/admin/api/contact/info/update/{id}', function(Request $request, Resp
     $res->bindParam(':cnt_ph_physio', $cnt_ph_physio);
     $res->bindParam(':cnt_lat', $cnt_lat);
     $res->bindParam(':cnt_lon', $cnt_lon);
+    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
     $res = null;
