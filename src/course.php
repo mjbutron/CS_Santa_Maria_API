@@ -60,7 +60,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
   $session_end = $request->getParam('session_end');
   $sessions = $request->getParam('sessions');
   $hours = $request->getParam('hours');
-  $level = $request->getParam('level');
+  $impart = $request->getParam('impart');
   $places = $request->getParam('places');
   $free_places = $request->getParam('free_places');
   $price = $request->getParam('price');
@@ -78,7 +78,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
             session_end,
             sessions,
             hours,
-            level,
+            impart,
             places,
             free_places,
             price,
@@ -95,7 +95,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
             :session_end,
             :sessions,
             :hours,
-            :level,
+            :impart,
             :places,
             :free_places,
             :price,
@@ -114,7 +114,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
     $res->bindParam(':session_end', $session_end);
     $res->bindParam(':sessions', $sessions);
     $res->bindParam(':hours', $hours);
-    $res->bindParam(':level', $level);
+    $res->bindParam(':impart', $impart);
     $res->bindParam(':places', $places);
     $res->bindParam(':free_places', $free_places);
     $res->bindParam(':price', $price);
@@ -143,7 +143,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
    $session_end = $request->getParam('session_end');
    $sessions = $request->getParam('sessions');
    $hours = $request->getParam('hours');
-   $level = $request->getParam('level');
+   $impart = $request->getParam('impart');
    $places = $request->getParam('places');
    $free_places = $request->getParam('free_places');
    $price = $request->getParam('price');
@@ -162,7 +162,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
           session_end = :session_end,
           sessions = :sessions,
           hours = :hours,
-          level = :level,
+          impart = :impart,
           places = :places,
           free_places = :free_places,
           price = :price,
@@ -183,7 +183,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
     $res->bindParam(':session_end', $session_end);
     $res->bindParam(':sessions', $sessions);
     $res->bindParam(':hours', $hours);
-    $res->bindParam(':level', $level);
+    $res->bindParam(':impart', $impart);
     $res->bindParam(':places', $places);
     $res->bindParam(':free_places', $free_places);
     $res->bindParam(':price', $price);
