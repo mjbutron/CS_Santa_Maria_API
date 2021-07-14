@@ -52,6 +52,7 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
   $home = $request->getParam('home');
   $title = $request->getParam('title');
   $description_home = $request->getParam('description_home');
+  $description = $request->getParam('description');
   $image = $request->getParam('image');
   $subtitle = $request->getParam('subtitle');
   $price = $request->getParam('price');
@@ -59,14 +60,18 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
   $session_date = $request->getParam('session_date');
   $session_start = $request->getParam('session_start');
   $session_end = $request->getParam('session_end');
-  $sessions = $request->getParam('sessions');
-  $description = $request->getParam('description');
+  $hours = $request->getParam('hours');
+  $places = $request->getParam('places');
+  $free_places = $request->getParam('free_places');
+  $new_workshop = $request->getParam('new_workshop');
+  $impart = $request->getParam('impart');
   $user_id = $request->getParam('user_id');
 
   $sql = "INSERT INTO workshop (
             home,
             title,
             description_home,
+            description,
             image,
             subtitle,
             price,
@@ -74,13 +79,17 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
             session_date,
             session_start,
             session_end,
-            sessions,
-            description,
+            hours,
+            places,
+            free_places,
+            new_workshop,
+            impart,
             user_id)
           VALUES (
             :home,
             :title,
             :description_home,
+            :description,
             :image,
             :subtitle,
             :price,
@@ -88,8 +97,11 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
             :session_date,
             :session_start,
             :session_end,
-            :sessions,
-            :description,
+            :hours,
+            :places,
+            :free_places,
+            :new_workshop,
+            :impart,
             :user_id)";
 
   try{
@@ -97,6 +109,7 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
     $res->bindParam(':home', $home);
     $res->bindParam(':title', $title);
     $res->bindParam(':description_home', $description_home);
+    $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
     $res->bindParam(':subtitle', $subtitle);
     $res->bindParam(':price', $price);
@@ -104,8 +117,11 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
     $res->bindParam(':session_date', $session_date);
     $res->bindParam(':session_start', $session_start);
     $res->bindParam(':session_end', $session_end);
-    $res->bindParam(':sessions', $sessions);
-    $res->bindParam(':description', $description);
+    $res->bindParam(':hours', $hours);
+    $res->bindParam(':places', $places);
+    $res->bindParam(':free_places', $free_places);
+    $res->bindParam(':new_workshop', $new_workshop);
+    $res->bindParam(':impart', $impart);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo taller creado.']);
@@ -123,6 +139,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
    $home = $request->getParam('home');
    $title = $request->getParam('title');
    $description_home = $request->getParam('description_home');
+   $description = $request->getParam('description');
    $image = $request->getParam('image');
    $subtitle = $request->getParam('subtitle');
    $price = $request->getParam('price');
@@ -130,8 +147,11 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
    $session_date = $request->getParam('session_date');
    $session_start = $request->getParam('session_start');
    $session_end = $request->getParam('session_end');
-   $sessions = $request->getParam('sessions');
-   $description = $request->getParam('description');
+   $hours = $request->getParam('hours');
+   $places = $request->getParam('places');
+   $free_places = $request->getParam('free_places');
+   $new_workshop = $request->getParam('new_workshop');
+   $impart = $request->getParam('impart');
    $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE workshop SET
@@ -139,6 +159,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
           home = :home,
           title = :title,
           description_home = :description_home,
+          description = :description,
           image = :image,
           subtitle = :subtitle,
           price = :price,
@@ -146,8 +167,11 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
           session_date = :session_date,
           session_start = :session_start,
           session_end = :session_end,
-          sessions = :sessions,
-          description = :description,
+          hours = :hours,
+          places = :places,
+          free_places = :free_places,
+          new_workshop = :new_workshop,
+          impart = :impart,
           user_id = :user_id
           WHERE id = $id_workshop";
 
@@ -157,6 +181,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
     $res->bindParam(':home', $home);
     $res->bindParam(':title', $title);
     $res->bindParam(':description_home', $description_home);
+    $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
     $res->bindParam(':subtitle', $subtitle);
     $res->bindParam(':price', $price);
@@ -164,8 +189,11 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
     $res->bindParam(':session_date', $session_date);
     $res->bindParam(':session_start', $session_start);
     $res->bindParam(':session_end', $session_end);
-    $res->bindParam(':sessions', $sessions);
-    $res->bindParam(':description', $description);
+    $res->bindParam(':hours', $hours);
+    $res->bindParam(':places', $places);
+    $res->bindParam(':free_places', $free_places);
+    $res->bindParam(':new_workshop', $new_workshop);
+    $res->bindParam(':impart', $impart);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado el taller.']);
