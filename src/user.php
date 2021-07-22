@@ -7,7 +7,6 @@ use \Firebase\JWT\JWT;
 
 // POST: Get user profile
 $app->post('/admin/api/userProfile', function(Request $request, Response $response, array $args){
-  $input = $request->getParsedBody();
   $sql = "SELECT * FROM user WHERE email= :email";
   try{
     $input = $request->getParsedBody();
