@@ -210,7 +210,6 @@ $app->delete('/admin/api/workshops/delete/{id}', function(Request $request, Resp
   $sql = "DELETE FROM workshop WHERE id = $id_workshop";
   try{
     $res = $this->db->prepare($sql);
-    $res->bindParam(':id', $id_workshop);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Taller eliminado.']);
 
