@@ -29,7 +29,7 @@ $app->post('/admin/api/findNotifications', function(Request $request, Response $
 // POST: Get all notifications by page
 $app->post('/admin/api/notificationsByPage/{page}', function(Request $request, Response $response, array $args){
   $page = $request->getAttribute('page');
-  $resultPerPage = 5;
+  $resultPerPage = 10;
   $start = ($page - 1) * $resultPerPage;
 
   $sql = "SELECT COUNT(*) FROM notification WHERE user_id=:user_id";
@@ -133,13 +133,22 @@ $app->post('/admin/api/notification/new', function(Request $request, Response $r
   $user_id = $request->getParam('user_id');
   $message = $request->getParam('message');
   $to = $request->getParam('to');
+  $urgent = 1; // Future
 
   try{
     if("ALL" == $to) {
       $sql = "INSERT INTO notification (description, user_id)
       SELECT '".$message."' AS description, id FROM user WHERE id != $user_id";
     }
+    else if("USER" == $to){
+      $sql = "INSERT INTO notification (description, urgent, user_id)
+      VALUES (:description, :urgent, :user_id)";
+    }
+
     $res = $this->db->prepare($sql);
+    $res->bindParam(':description', $message);
+    $res->bindParam(':urgent', $urgent);
+    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Notificaciones creadas']);
     $res = null;
