@@ -26,6 +26,7 @@ require __DIR__ . '/../src/aboutus.php';
 require __DIR__ . '/../src/roles.php';
 require __DIR__ . '/../src/users.php';
 require __DIR__ . '/../src/notification.php';
+require __DIR__ . '/../src/sendemail.php';
 
 $app->run();
 
