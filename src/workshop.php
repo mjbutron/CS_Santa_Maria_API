@@ -22,6 +22,24 @@ $app->get('/api/allWorkshops', function(Request $request, Response $response, ar
   }
 });
 
+// GET: Get workshop by Id
+$app->get('/api/workshop/{id}', function(Request $request, Response $response, array $args){
+  $id_workshop = $request->getAttribute('id');
+  $sql = "SELECT * FROM workshop WHERE id = $id_workshop";
+  try{
+    $res = $this->db->prepare($sql);
+    $res->execute();
+    $workshop = $res->fetchAll(PDO::FETCH_OBJ);
+
+    return $this->response->withJson(['cod' => '200', 'workshop' => $workshop]);
+    $res = null;
+
+  }catch(PDOException $e){
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
+  }
+});
+
 // GET: Get all active workshops
 $app->get('/api/activeWorkshops', function(Request $request, Response $response, array $args){
   $sql = "SELECT * FROM workshop WHERE active = 1 ORDER BY new_workshop DESC, session_date ASC";

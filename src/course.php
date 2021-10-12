@@ -22,6 +22,24 @@ $app->get('/api/courses', function(Request $request, Response $response, array $
   }
 });
 
+// GET: Get course by Id
+$app->get('/api/course/{id}', function(Request $request, Response $response, array $args){
+  $id_course = $request->getAttribute('id');
+  $sql = "SELECT * FROM course WHERE id = $id_course";
+  try{
+    $res = $this->db->prepare($sql);
+    $res->execute();
+    $course = $res->fetchAll(PDO::FETCH_OBJ);
+
+    return $this->response->withJson(['cod' => '200', 'course' => $course]);
+    $res = null;
+
+  }catch(PDOException $e){
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
+  }
+});
+
 // GET: Get all active courses
 $app->get('/api/activeCourses', function(Request $request, Response $response, array $args){
   $sql = "SELECT * FROM course WHERE active = 1 ORDER BY new_course DESC, session_date ASC";
