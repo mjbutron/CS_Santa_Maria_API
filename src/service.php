@@ -22,6 +22,24 @@ $app->get('/api/allServices', function(Request $request, Response $response, arr
   }
 });
 
+// GET: Get service by Id
+$app->get('/api/service/{id}', function(Request $request, Response $response, array $args){
+  $id_service = $request->getAttribute('id');
+  $sql = "SELECT * FROM service WHERE id = $id_service";
+  try{
+    $res = $this->db->prepare($sql);
+    $res->execute();
+    $service = $res->fetchAll(PDO::FETCH_OBJ);
+
+    return $this->response->withJson(['cod' => '200', 'service' => $service]);
+    $res = null;
+
+  }catch(PDOException $e){
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
+  }
+});
+
 // GET: Get all active services
 $app->get('/api/activeServices', function(Request $request, Response $response, array $args){
   $sql = "SELECT * FROM service WHERE active = 1 ORDER BY create_date DESC";
