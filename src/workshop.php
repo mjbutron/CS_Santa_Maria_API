@@ -86,7 +86,7 @@ $app->get('/api/workshopsByPage/{page}', function(Request $request, Response $re
 $app->post('/admin/api/workshops/new', function(Request $request, Response $response, array $args){
   $home = $request->getParam('home');
   $title = $request->getParam('title');
-  $description_home = $request->getParam('description_home');
+  $short_description = $request->getParam('short_description');
   $description = $request->getParam('description');
   $image = $request->getParam('image');
   $subtitle = $request->getParam('subtitle');
@@ -105,7 +105,7 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
   $sql = "INSERT INTO workshop (
             home,
             title,
-            description_home,
+            short_description,
             description,
             image,
             subtitle,
@@ -123,7 +123,7 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
           VALUES (
             :home,
             :title,
-            :description_home,
+            :short_description,
             :description,
             :image,
             :subtitle,
@@ -143,7 +143,7 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
     $res = $this->db->prepare($sql);
     $res->bindParam(':home', $home);
     $res->bindParam(':title', $title);
-    $res->bindParam(':description_home', $description_home);
+    $res->bindParam(':short_description', $short_description);
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
     $res->bindParam(':subtitle', $subtitle);
@@ -173,7 +173,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
    $active = $request->getParam('active');
    $home = $request->getParam('home');
    $title = $request->getParam('title');
-   $description_home = $request->getParam('description_home');
+   $short_description = $request->getParam('short_description');
    $description = $request->getParam('description');
    $image = $request->getParam('image');
    $subtitle = $request->getParam('subtitle');
@@ -193,7 +193,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
           active = :active,
           home = :home,
           title = :title,
-          description_home = :description_home,
+          short_description = :short_description,
           description = :description,
           image = :image,
           subtitle = :subtitle,
@@ -215,7 +215,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
     $res->bindParam(':active', $active);
     $res->bindParam(':home', $home);
     $res->bindParam(':title', $title);
-    $res->bindParam(':description_home', $description_home);
+    $res->bindParam(':short_description', $short_description);
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
     $res->bindParam(':subtitle', $subtitle);
