@@ -85,6 +85,7 @@ $app->get('/api/coursesByPage/{page}', function(Request $request, Response $resp
 // POST: Add new course
 $app->post('/admin/api/courses/new', function(Request $request, Response $response, array $args){
   $title = $request->getParam('title');
+  $short_description = $request->getParam('short_description');
   $description = $request->getParam('description');
   $image = $request->getParam('image');
   $new_course = $request->getParam('new_course');
@@ -103,6 +104,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
 
   $sql = "INSERT INTO course (
             title,
+            short_description,
             description,
             image,
             new_course,
@@ -120,6 +122,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
             user_id)
           VALUES (
             :title,
+            :short_description,
             :description,
             :image,
             :new_course,
@@ -139,6 +142,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
   try{
     $res = $this->db->prepare($sql);
     $res->bindParam(':title', $title);
+    $res->bindParam(':short_description', $short_description);
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
     $res->bindParam(':new_course', $new_course);
@@ -168,6 +172,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
    $id_course = $request->getAttribute('id');
    $active = $request->getParam('active');
    $title = $request->getParam('title');
+   $short_description = $request->getParam('short_description');
    $description = $request->getParam('description');
    $image = $request->getParam('image');
    $new_course = $request->getParam('new_course');
@@ -187,6 +192,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
   $sql= "UPDATE course SET
           active = :active,
           title = :title,
+          short_description = :short_description,
           description = :description,
           image = :image,
           new_course = :new_course,
@@ -208,6 +214,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
     $res = $this->db->prepare($sql);
     $res->bindParam(':active', $active);
     $res->bindParam(':title', $title);
+    $res->bindParam(':short_description', $short_description);
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
     $res->bindParam(':new_course', $new_course);
