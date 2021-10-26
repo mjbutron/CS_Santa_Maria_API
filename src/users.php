@@ -5,7 +5,7 @@ use \Firebase\JWT\JWT;
 
 // Routes Users
 
-// POST: Get all users
+// GET: Get all users
 $app->get('/api/allUsers', function(Request $request, Response $response, array $args){
   $sql = "SELECT * FROM user ORDER BY surname ASC";
   try{
@@ -175,6 +175,31 @@ $app->put('/admin/api/users/update/{id}', function(Request $request, Response $r
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Usuario actualizado.']);
     $res = null;
+  }catch(PDOException $e){
+    return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
+    ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
+  }
+});
+
+// POST: Validate email
+$app->post('/admin/api/validateEmail', function(Request $request, Response $response, array $args){
+  $sql = "SELECT * FROM user WHERE email= :email";
+  try{
+    $input = $request->getParsedBody();
+    $res = $this->db->prepare($sql);
+    $res->bindParam("email", $input['email']);
+    $res->execute();
+    $user = $res->fetchObject();
+
+    if($user) {
+      return $this->response->withJson(['cod' => '200', 'exists' => true]);
+    }
+    else{
+      return $this->response->withJson(['cod' => '200', 'exists' => false]);
+    }
+
+    $res = null;
+
   }catch(PDOException $e){
     return $this->response->withStatus(503)->withHeader('Content-Type', 'application/json')
     ->withJson(['cod' => 503, 'message' => 'No es posible conectar con la base de datos.']);
