@@ -3,7 +3,9 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use \Firebase\JWT\JWT;
 
-// Footer Information
+// Routes Footer
+
+// GET: Get footer information
 $app->get('/api/footer/info', function(Request $request, Response $response, array $args){
   $sql = "SELECT id, footer_address, footer_email, footer_ph, footer_schdl
   FROM options";

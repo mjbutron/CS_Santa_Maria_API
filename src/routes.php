@@ -1,14 +1,13 @@
 <?php
-
 use Slim\Http\Request;
 use Slim\Http\Response;
 use \Firebase\JWT\JWT;
 
+// Routes access
+
 // POST: Login
 $app->post('/login', function (Request $request, Response $response, array $args) {
-
     $input = $request->getParsedBody();
-    //$sql = "SELECT id, name, surname, email, telephone, password FROM user WHERE email= :email";
     $sql = "SELECT u.id, u.active, u.name, u.surname, u.email, u.telephone, u.password, u.change_pass, u.image, r.rol_name
             FROM user u
             INNER JOIN rol r

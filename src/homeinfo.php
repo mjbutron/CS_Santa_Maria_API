@@ -3,7 +3,9 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use \Firebase\JWT\JWT;
 
-// GET: Home Information
+// Routes Home
+
+// GET: Get home information
 $app->get('/api/home/info', function(Request $request, Response $response, array $args){
   $sql = "SELECT id, home_first_ph, home_second_ph, home_fcbk, home_ytube, home_insta
   FROM options";
