@@ -7,7 +7,7 @@ use \Firebase\JWT\JWT;
 
 // GET: Get footer information
 $app->get('/api/footer/info', function(Request $request, Response $response, array $args){
-  $sql = "SELECT id, footer_address, footer_email, footer_ph, footer_schdl
+  $sql = "SELECT id, footer_address, footer_email, footer_ph, footer_schdl, footer_social_links
   FROM options";
   try{
     $res = $this->db->prepare($sql);
@@ -30,6 +30,7 @@ $app->put('/admin/api/footer/info/update/{id}', function(Request $request, Respo
    $footer_email = $request->getParam('footer_email');
    $footer_ph = $request->getParam('footer_ph');
    $footer_schdl = $request->getParam('footer_schdl');
+   $footer_social_links = $request->getParam('footer_social_links');
    $user_id = $request->getParam('user_id');
 
   $sql = "UPDATE options SET
@@ -37,6 +38,7 @@ $app->put('/admin/api/footer/info/update/{id}', function(Request $request, Respo
           footer_email = :footer_email,
           footer_ph = :footer_ph,
           footer_schdl = :footer_schdl,
+          footer_social_links = :footer_social_links,
           user_id = :user_id
         WHERE id = $id";
 
@@ -46,6 +48,7 @@ $app->put('/admin/api/footer/info/update/{id}', function(Request $request, Respo
     $res->bindParam(':footer_email', $footer_email);
     $res->bindParam(':footer_ph', $footer_ph);
     $res->bindParam(':footer_schdl', $footer_schdl);
+    $res->bindParam(':footer_social_links', $footer_social_links);
     $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
