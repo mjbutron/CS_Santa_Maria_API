@@ -60,7 +60,6 @@ $app->post('/admin/api/aboutus/new', function(Request $request, Response $respon
   $user_fcbk = $request->getParam('user_fcbk');
   $user_ytube = $request->getParam('user_ytube');
   $user_insta = $request->getParam('user_insta');
-  $user_id = $request->getParam('user_id');
 
   $sql = "INSERT INTO aboutus (
             name,
@@ -72,8 +71,7 @@ $app->post('/admin/api/aboutus/new', function(Request $request, Response $respon
             academic_degree,
             user_fcbk,
             user_ytube,
-            user_insta,
-            user_id)
+            user_insta)
           VALUES (
             :name,
             :surname1,
@@ -84,8 +82,7 @@ $app->post('/admin/api/aboutus/new', function(Request $request, Response $respon
             :academic_degree,
             :user_fcbk,
             :user_ytube,
-            :user_insta,
-            :user_id)";
+            :user_insta)";
 
   try{
     $res = $this->db->prepare($sql);
@@ -99,7 +96,6 @@ $app->post('/admin/api/aboutus/new', function(Request $request, Response $respon
     $res->bindParam(':user_fcbk', $user_fcbk);
     $res->bindParam(':user_ytube', $user_ytube);
     $res->bindParam(':user_insta', $user_insta);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Nueva entrada creada.']);
     $res = null;
@@ -122,7 +118,6 @@ $app->put('/admin/api/aboutus/update/{id}', function(Request $request, Response 
    $user_fcbk = $request->getParam('user_fcbk');
    $user_ytube = $request->getParam('user_ytube');
    $user_insta = $request->getParam('user_insta');
-   $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE aboutus SET
           name = :name,
@@ -134,8 +129,7 @@ $app->put('/admin/api/aboutus/update/{id}', function(Request $request, Response 
           academic_degree = :academic_degree,
           user_fcbk = :user_fcbk,
           user_ytube = :user_ytube,
-          user_insta = :user_insta,
-          user_id = :user_id
+          user_insta = :user_insta
           WHERE id = $id_aboutus";
 
   try{
@@ -150,7 +144,6 @@ $app->put('/admin/api/aboutus/update/{id}', function(Request $request, Response 
     $res->bindParam(':user_fcbk', $user_fcbk);
     $res->bindParam(':user_ytube', $user_ytube);
     $res->bindParam(':user_insta', $user_insta);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado la entrada.']);
     $res = null;
