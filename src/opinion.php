@@ -55,22 +55,19 @@ $app->post('/admin/api/opinions/new', function(Request $request, Response $respo
   $name = $request->getParam('name');
   $commentary = $request->getParam('commentary');
   $rating = $request->getParam('rating');
-  $user_id = $request->getParam('user_id');
 
   $sql = "INSERT INTO opinion (
             home,
             image,
             name,
             commentary,
-            rating,
-            user_id)
+            rating)
           VALUES (
             :home,
             :image,
             :name,
             :commentary,
-            :rating,
-            :user_id)";
+            :rating)";
 
   try{
     $res = $this->db->prepare($sql);
@@ -79,7 +76,6 @@ $app->post('/admin/api/opinions/new', function(Request $request, Response $respo
     $res->bindParam(':name', $name);
     $res->bindParam(':commentary', $commentary);
     $res->bindParam(':rating', $rating);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Nueva opinión creada.']);
     $res = null;
@@ -97,15 +93,13 @@ $app->put('/admin/api/opinions/update/{id}', function(Request $request, Response
    $name = $request->getParam('name');
    $commentary = $request->getParam('commentary');
    $rating = $request->getParam('rating');
-   $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE opinion SET
           home = :home,
           image = :image,
           name = :name,
           commentary = :commentary,
-          rating = :rating,
-          user_id = :user_id
+          rating = :rating
           WHERE id = $id_opinion";
 
   try{
@@ -115,7 +109,6 @@ $app->put('/admin/api/opinions/update/{id}', function(Request $request, Response
     $res->bindParam(':name', $name);
     $res->bindParam(':commentary', $commentary);
     $res->bindParam(':rating', $rating);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado la opinión.']);
     $res = null;

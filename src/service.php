@@ -88,20 +88,17 @@ $app->post('/admin/api/services/new', function(Request $request, Response $respo
   $image = $request->getParam('image');
   $subtitle = $request->getParam('subtitle');
   $description = $request->getParam('description');
-  $user_id = $request->getParam('user_id');
 
   $sql = "INSERT INTO service (
             title,
             image,
             subtitle,
-            description,
-            user_id)
+            description)
           VALUES (
             :title,
             :image,
             :subtitle,
-            :description,
-            :user_id)";
+            :description)";
 
   try{
     $res = $this->db->prepare($sql);
@@ -109,7 +106,6 @@ $app->post('/admin/api/services/new', function(Request $request, Response $respo
     $res->bindParam(':image', $image);
     $res->bindParam(':subtitle', $subtitle);
     $res->bindParam(':description', $description);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo servicio creado']);
     $res = null;
@@ -127,15 +123,13 @@ $app->put('/admin/api/services/update/{id}', function(Request $request, Response
    $image = $request->getParam('image');
    $subtitle = $request->getParam('subtitle');
    $description = $request->getParam('description');
-   $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE service SET
           active = :active,
           title = :title,
           image = :image,
           subtitle = :subtitle,
-          description = :description,
-          user_id = :user_id
+          description = :description
           WHERE id = $id_service";
 
   try{
@@ -145,7 +139,6 @@ $app->put('/admin/api/services/update/{id}', function(Request $request, Response
     $res->bindParam(':image', $image);
     $res->bindParam(':subtitle', $subtitle);
     $res->bindParam(':description', $description);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado el servicio.']);
     $res = null;
