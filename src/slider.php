@@ -28,9 +28,8 @@ $app->post('/admin/api/slider/new', function(Request $request, Response $respons
    $description = $request->getParam('description');
    $image = $request->getParam('image');
    $order_slider = $request->getParam('order_slider');
-   $user = $request->getParam('user');
 
-  $sql = "INSERT INTO slider (title, description, image, order_slider, create_date, update_date, user_id) VALUES
+  $sql = "INSERT INTO slider (title, description, image, order_slider, create_date, update_date) VALUES
           (:title, :description, :image, :order_slider, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), :user)";
   try{
     $res = $this->db->prepare($sql);
@@ -38,7 +37,6 @@ $app->post('/admin/api/slider/new', function(Request $request, Response $respons
     $res->bindParam(':description', $description);
     $res->bindParam(':image', $image);
     $res->bindParam(':order_slider', $order_slider);
-    $res->bindParam(':user', $user);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo Slider creado.']);
     $res = null;
@@ -56,15 +54,13 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
    $image = $request->getParam('image');
    $color_text = $request->getParam('color_text');
    $order_slider = $request->getParam('order_slider');
-   $user = $request->getParam('user_id');
 
   $sql = "UPDATE slider SET
           title = :title,
           description = :description,
           image = :image,
           color_text = :color_text,
-          order_slider = :order_slider,
-          user_id = :user
+          order_slider = :order_slider
         WHERE id = $id_slider";
 
   try{
@@ -74,7 +70,6 @@ $app->put('/admin/api/slider/update/{id}', function(Request $request, Response $
     $res->bindParam(':image', $image);
     $res->bindParam(':color_text', $color_text);
     $res->bindParam(':order_slider', $order_slider);
-    $res->bindParam(':user', $user);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Se ha editado la cabecera.']);
     $res = null;
