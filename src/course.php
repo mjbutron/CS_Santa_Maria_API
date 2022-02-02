@@ -100,7 +100,6 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
   $places = $request->getParam('places');
   $free_places = $request->getParam('free_places');
   $price = $request->getParam('price');
-  $user_id = $request->getParam('user_id');
 
   $sql = "INSERT INTO course (
             title,
@@ -118,8 +117,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
             impart,
             places,
             free_places,
-            price,
-            user_id)
+            price)
           VALUES (
             :title,
             :short_description,
@@ -136,8 +134,7 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
             :impart,
             :places,
             :free_places,
-            :price,
-            :user_id)";
+            :price)";
 
   try{
     $res = $this->db->prepare($sql);
@@ -157,7 +154,6 @@ $app->post('/admin/api/courses/new', function(Request $request, Response $respon
     $res->bindParam(':places', $places);
     $res->bindParam(':free_places', $free_places);
     $res->bindParam(':price', $price);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo curso creado.']);
     $res = null;
@@ -187,7 +183,6 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
    $places = $request->getParam('places');
    $free_places = $request->getParam('free_places');
    $price = $request->getParam('price');
-   $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE course SET
           active = :active,
@@ -206,8 +201,7 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
           impart = :impart,
           places = :places,
           free_places = :free_places,
-          price = :price,
-          user_id = :user_id
+          price = :price
           WHERE id = $id_course";
 
   try{
@@ -229,7 +223,6 @@ $app->put('/admin/api/courses/update/{id}', function(Request $request, Response 
     $res->bindParam(':places', $places);
     $res->bindParam(':free_places', $free_places);
     $res->bindParam(':price', $price);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado el curso.']);
     $res = null;
