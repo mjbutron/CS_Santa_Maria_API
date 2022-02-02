@@ -31,15 +31,13 @@ $app->put('/admin/api/home/info/update/{id}', function(Request $request, Respons
    $home_fcbk = $request->getParam('home_fcbk');
    $home_ytube = $request->getParam('home_ytube');
    $home_insta = $request->getParam('home_insta');
-   $user_id = $request->getParam('user_id');
 
   $sql = "UPDATE options SET
           home_first_ph = :home_first_ph,
           home_second_ph = :home_second_ph,
           home_fcbk = :home_fcbk,
           home_ytube = :home_ytube,
-          home_insta = :home_insta,
-          user_id = :user_id
+          home_insta = :home_insta
         WHERE id = $id";
 
   try{
@@ -49,7 +47,6 @@ $app->put('/admin/api/home/info/update/{id}', function(Request $request, Respons
     $res->bindParam(':home_fcbk', $home_fcbk);
     $res->bindParam(':home_ytube', $home_ytube);
     $res->bindParam(':home_insta', $home_insta);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
     $res = null;

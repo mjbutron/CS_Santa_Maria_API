@@ -31,15 +31,13 @@ $app->put('/admin/api/footer/info/update/{id}', function(Request $request, Respo
    $footer_ph = $request->getParam('footer_ph');
    $footer_schdl = $request->getParam('footer_schdl');
    $footer_social_links = $request->getParam('footer_social_links');
-   $user_id = $request->getParam('user_id');
 
   $sql = "UPDATE options SET
           footer_address = :footer_address,
           footer_email = :footer_email,
           footer_ph = :footer_ph,
           footer_schdl = :footer_schdl,
-          footer_social_links = :footer_social_links,
-          user_id = :user_id
+          footer_social_links = :footer_social_links
         WHERE id = $id";
 
   try{
@@ -49,7 +47,6 @@ $app->put('/admin/api/footer/info/update/{id}', function(Request $request, Respo
     $res->bindParam(':footer_ph', $footer_ph);
     $res->bindParam(':footer_schdl', $footer_schdl);
     $res->bindParam(':footer_social_links', $footer_social_links);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Información actualizada.']);
     $res = null;
