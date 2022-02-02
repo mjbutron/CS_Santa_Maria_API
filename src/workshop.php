@@ -100,7 +100,6 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
   $free_places = $request->getParam('free_places');
   $new_workshop = $request->getParam('new_workshop');
   $impart = $request->getParam('impart');
-  $user_id = $request->getParam('user_id');
 
   $sql = "INSERT INTO workshop (
             home,
@@ -118,8 +117,7 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
             places,
             free_places,
             new_workshop,
-            impart,
-            user_id)
+            impart)
           VALUES (
             :home,
             :title,
@@ -136,8 +134,7 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
             :places,
             :free_places,
             :new_workshop,
-            :impart,
-            :user_id)";
+            :impart)";
 
   try{
     $res = $this->db->prepare($sql);
@@ -157,7 +154,6 @@ $app->post('/admin/api/workshops/new', function(Request $request, Response $resp
     $res->bindParam(':free_places', $free_places);
     $res->bindParam(':new_workshop', $new_workshop);
     $res->bindParam(':impart', $impart);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Nuevo taller creado.']);
     $res = null;
@@ -187,7 +183,6 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
    $free_places = $request->getParam('free_places');
    $new_workshop = $request->getParam('new_workshop');
    $impart = $request->getParam('impart');
-   $user_id = $request->getParam('user_id');
 
   $sql= "UPDATE workshop SET
           active = :active,
@@ -206,8 +201,7 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
           places = :places,
           free_places = :free_places,
           new_workshop = :new_workshop,
-          impart = :impart,
-          user_id = :user_id
+          impart = :impart
           WHERE id = $id_workshop";
 
   try{
@@ -229,7 +223,6 @@ $app->put('/admin/api/workshops/update/{id}', function(Request $request, Respons
     $res->bindParam(':free_places', $free_places);
     $res->bindParam(':new_workshop', $new_workshop);
     $res->bindParam(':impart', $impart);
-    $res->bindParam(':user_id', $user_id);
     $res->execute();
     return $this->response->withJson(['cod' => '200', 'message' => 'Se ha actualizado el taller.']);
     $res = null;
