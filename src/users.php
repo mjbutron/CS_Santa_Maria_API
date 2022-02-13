@@ -30,7 +30,7 @@ $app->get('/api/usersByPage/{page}', function(Request $request, Response $respon
 
   $sql = "SELECT COUNT(*) FROM user";
   $sqlPage = "SELECT u.id, u.active, u.name, u.surname, u.email, u.telephone,
-                     u.address, u.city, u.province, u.zipcode, u.aboutme, u.password,
+                     u.address, u.city, u.province, u.zipcode, u.password,
                      u.user_fcbk, u.user_ytube, u.user_insta, u.image, u.last_login,
                      u.create_date, u.update_date, r.id as rol_id, r.rol_name
               FROM user u, rol r

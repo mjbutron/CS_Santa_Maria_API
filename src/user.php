@@ -34,7 +34,6 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
    $city = $request->getParam('city');
    $province = $request->getParam('province');
    $zipcode = $request->getParam('zipcode');
-   $aboutme = $request->getParam('aboutme');
    $user_fcbk = $request->getParam('user_fcbk');
    $user_ytube = $request->getParam('user_ytube');
    $user_insta = $request->getParam('user_insta');
@@ -48,7 +47,6 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
           city = :city,
           province = :province,
           zipcode = :zipcode,
-          aboutme = :aboutme,
           user_fcbk = :user_fcbk,
           user_ytube = :user_ytube,
           user_insta = :user_insta,
@@ -64,7 +62,6 @@ $app->put('/admin/api/userProfile/update/{id}', function(Request $request, Respo
     $res->bindParam(':city', $city);
     $res->bindParam(':province', $province);
     $res->bindParam(':zipcode', $zipcode);
-    $res->bindParam(':aboutme', $aboutme);
     $res->bindParam(':user_fcbk', $user_fcbk);
     $res->bindParam(':user_ytube', $user_ytube);
     $res->bindParam(':user_insta', $user_insta);
@@ -130,7 +127,7 @@ $app->put('/admin/api/userProfile/updatePass/{id}', function(Request $request, R
 // POST: Get user data
 $app->post('/admin/api/userData', function(Request $request, Response $response, array $args){
   $sql = "SELECT u.id, u.active, u.name, u.surname, u.email, u.telephone,
-                  u.address, u.city, u.province, u.zipcode, u.aboutme,
+                  u.address, u.city, u.province, u.zipcode,
                   u.password, u.change_pass, u.image, r.rol_name
           FROM user u
           INNER JOIN rol r
