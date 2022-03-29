@@ -1,6 +1,5 @@
 <?php
 // Configuration
-// $container = $app->getContainer();
 
 // DB instance
 $container['db'] = function ($c) {
@@ -15,8 +14,8 @@ $container['db'] = function ($c) {
 $container['notFoundHandler'] = function ($c) {
     return function ($request, $response) use ($c) {
         return $response->withStatus(404)
-            ->withHeader('Content-Type', 'text/html')
-            ->write('Page not found');
+            ->withHeader('Content-Type', 'application/json')
+            ->withJson(['cod' => 404, 'message' => 'Página no encontrada']);
     };
 };
 

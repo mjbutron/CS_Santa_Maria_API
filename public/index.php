@@ -11,7 +11,7 @@ require __DIR__ . '/../src/dependencies.php';
 // Register middleware
 require __DIR__ . '/../src/middleware.php';
 // Register routes
-require __DIR__ . '/../src/routes.php';
+require __DIR__ . '/../src/access.php';
 require __DIR__ . '/../src/slider.php';
 require __DIR__ . '/../src/service.php';
 require __DIR__ . '/../src/upload.php';
