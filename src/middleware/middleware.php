@@ -1,5 +1,5 @@
 <?php
-// Application middleware
+// Application middleware configuration
 
 // Middleware for enabling CORS
 $app->add(function ($req, $res, $next) {
@@ -12,17 +12,17 @@ $app->add(function ($req, $res, $next) {
 
 // Middleware enabling Authentication
 $app->add(new \Tuupola\Middleware\JwtAuthentication([
-    "path" => "/admin", /* or ["/api", "/admin"] */
+    "path" => "/admin",
     "attribute" => "decoded_token_data",
     "secure" => false,
-    "secret" => "****",
+    "secret" => "*****",
     "algorithm" => ["HS256"],
     "error" => function ($response, $arguments) {
         $data["status"] = "error";
         $data["message"] = $arguments["message"];
-        return $response
-            ->withHeader("Content-Type", "application/json")
-            ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+        return $response->withStatus(401)
+        ->withHeader('Content-Type', 'application/json')
+        ->withJson(['error' => true, 'message' => 'Acceso denegado']);
     }
 ]));
 

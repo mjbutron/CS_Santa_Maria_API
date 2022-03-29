@@ -5,13 +5,17 @@ return [
         'db' => [
             'host' => 'localhost',
             'name' => 'cssmdb',
-            'user' => 'admin',
-            'password' => '12345678'
+            'user' => 'root',
+            'password' => ''
         ],
         // JWT settings
         'jwt' => [
-           'secret' => '****'
-       ]
+           'secret' => '*****'
+        ],
+        // Default pass (new users)
+        'default' => [
+           'pass' => '*****'
+        ]
     ],
 ];
 

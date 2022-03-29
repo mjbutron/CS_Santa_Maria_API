@@ -1,15 +1,17 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
-// Instantiate the app
-$settings = require __DIR__ . '/../src/settings.php';
+// Instantiate the app with settings
+$settings = require __DIR__ . '/../src/configuration/settings.php';
 $app = new \Slim\App($settings);
 $container = $app->getContainer();
 
-// Register dependencies
-require __DIR__ . '/../src/dependencies.php';
-// Register middleware
-require __DIR__ . '/../src/middleware.php';
+// Register data base configuration
+require __DIR__ . '/../src/configuration/db.php';
+// Register handler configuration
+require __DIR__ . '/../src/handlers/handlers.php';
+// Register middleware configuration
+require __DIR__ . '/../src/middleware/middleware.php';
 // Register routes
 require __DIR__ . '/../src/access.php';
 require __DIR__ . '/../src/slider.php';
