@@ -1,5 +1,5 @@
 <?php
-// Application middleware configuration
+// Application Middleware configuration
 
 // Middleware for enabling CORS
 $app->add(function ($req, $res, $next) {

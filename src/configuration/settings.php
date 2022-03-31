@@ -1,7 +1,7 @@
 <?php
 return [
     'settings' => [
-        // DB Settings
+        // Data Base Settings
         'db' => [
             'host' => 'localhost',
             'name' => 'cssmdb',
