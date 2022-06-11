@@ -66,8 +66,6 @@ $app->post('/admin/api/users/new', function(Request $request, Response $response
   $rol_id = $request->getParam('rol_id');
 
   $settings = $this->get('settings'); // get settings array.
-
-
   $password =   $settings['default']['pass'];
   $password = password_hash($password, PASSWORD_DEFAULT);
 

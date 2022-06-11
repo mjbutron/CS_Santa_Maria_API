@@ -1,5 +1,5 @@
 <?php
-
+// API main
 require __DIR__ . '/../vendor/autoload.php';
 // Instantiate the app with settings
 $settings = require __DIR__ . '/../src/configuration/settings.php';

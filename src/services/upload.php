@@ -4,8 +4,6 @@ use Slim\Http\Response;
 use \Firebase\JWT\JWT;
 
 // Upload files
-
-// POST: Upload file
 $app->post('/admin/api/upload', function(Request $request, Response $response, array $args){
 
   $uploadedFiles = $request->getUploadedFiles();
