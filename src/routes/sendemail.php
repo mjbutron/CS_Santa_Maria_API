@@ -8,7 +8,8 @@ use \Firebase\JWT\JWT;
 // POST: Send email
 $app->post('/api/sendEmail', function(Request $request, Response $response, array $args){
 
-  $to = "info@sisloc.es"; // Email del centro
+  $settings = $this->get('settings'); // get settings array.
+  $to = $settings['emails']['information'];
   $name = $request->getParam('name');
   $surname = $request->getParam('surname');
   $email = $request->getParam('email');
