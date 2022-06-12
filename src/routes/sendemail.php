@@ -15,9 +15,32 @@ $app->post('/api/sendEmail', function(Request $request, Response $response, arra
   $email = $request->getParam('email');
   $subject = $request->getParam('subject');
   $message = $request->getParam('message');
-  $content = "Nombre: " . $name . "\nApellidos: " . $surname . "\nEmail: " . $email . "\n\nMensaje:\n" . $message . "\n\nEmail de contacto enviado desde la web del Centro Sanitario Santa María.";
 
-  if(mail($to, $subject, $content)){
+  $content = "
+    <html>
+      <head>
+        <title>Title</title>
+      </head>
+      <body>
+        <hr style='border-color: #0095A6;'>
+        <div style='font-family: Amatic SC, cursive;'>" . $subject . "</div>
+        <hr style='border-color: #04c1c3;'>
+        <div style='font-size: 10px;'><b>Datos del usuario</b></div>
+        <div style='font-size: 10px;'>Nombre: "  . $name . "</div>
+        <div style='font-size: 10px;'>Apellidos: "  . $surname . "</div>
+        <div style='font-size: 10px;'>Email: "  . $email . "</div>
+        <div style='font-size: 10px; margin-top:10px;'><b>Mensaje</b></div>
+        <div style='font-size: 10px;margin-bottom:10px;'>" . $message . "</div>
+        <hr style='border-color: #0095A6;'>
+        <div style='font-size: 8px;color:#638699'>*Email de contacto enviado desde la web del Centro Sanitario Santa María.</div>
+      </body>
+    </html>
+    ";
+
+  $headers = "MIME-Version: 1.0\r\n";
+  $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
+
+  if(mail($to, $subject, $content, $headers)){
     return $this->response->withJson(['cod' => '200', 'message' => 'Email enviado']);
   }
   else {
